@@ -37,12 +37,8 @@
   </div>
 </section>
 <section class="benefits"><div class="wrap benefit-grid"><div><b>🧩 Sensoriais</b><span>Texturas, movimentos e diversão.</span></div><div><b>🎁 Personalizados</b><span>Peças feitas especialmente para você.</span></div><div><b>🏡 Decoração</b><span>Detalhes que deixam o ambiente especial.</span></div><div><b>💬 Pedido fácil</b><span>Adicione ao carrinho e envie tudo de uma vez pelo WhatsApp.</span></div></div></section>
-
 <section id="destaques" class="featured wrap">
-  <div class="featured-head">
-    <div><span class="eyebrow">ESCOLHAS AFLARTE</span><h2>Produtos em destaque</h2><p>Uma seleção para conhecer diferentes estilos do nosso catálogo.</p></div>
-    <a class="featured-link" href="#produtos">Ver catálogo completo →</a>
-  </div>
+  <div class="featured-head"><div><span class="eyebrow">ESCOLHAS AFLARTE</span><h2>Produtos em destaque</h2><p>Uma seleção para conhecer diferentes estilos do nosso catálogo.</p></div><a class="featured-link" href="#produtos">Ver catálogo completo →</a></div>
   <div class="featured-grid">
     <article class="featured-card"><div class="featured-img"><span class="featured-badge">Sensorial</span><img src="assets/kit-macarrao.webp" alt="Kit Macarrão Sensorial"></div><div class="featured-copy"><h3>Kit Macarrão Sensorial</h3><p>Brincadeira de faz de conta com exploração sensorial.</p><strong>R$ 160,00</strong><div class="featured-actions"><button type="button" class="btn soft" onclick="openModal('macarrao')">Detalhes</button><button type="button" class="btn primary" onclick="addToCart('macarrao')">Adicionar</button></div></div></article>
     <article class="featured-card"><div class="featured-img"><span class="featured-badge">Kit completo</span><img src="assets/kit-rosa.webp" alt="Kit Sensorial Rosa"></div><div class="featured-copy"><h3>Kit Sensorial Rosa</h3><p>Cinco peças com movimentos, texturas e formas diferentes.</p><strong>R$ 110,00</strong><div class="featured-actions"><button type="button" class="btn soft" onclick="openModal('kit-rosa')">Detalhes</button><button type="button" class="btn primary" onclick="addToCart('kit-rosa')">Adicionar</button></div></div></article>
@@ -50,16 +46,11 @@
     <article class="featured-card"><div class="featured-img"><span class="featured-badge">Decoração cristã</span><img src="assets/ore-confie.webp" alt="Letreiro Ore e Confie"></div><div class="featured-copy"><h3>Letreiro “Ore e Confie”</h3><p>Uma mensagem de fé para deixar o ambiente ainda mais especial.</p><strong>R$ 28,00</strong><div class="featured-actions"><button type="button" class="btn soft" onclick="openModal('ore-confie')">Detalhes</button><button type="button" class="btn primary" onclick="addToCart('ore-confie')">Adicionar</button></div></div></article>
   </div>
 </section>
-
 <section class="trust"><div class="wrap trust-grid"><div><span>🖨️</span><div><b>Produção própria</b><small>Peças produzidas em impressão 3D.</small></div></div><div><span>✨</span><div><b>Feito sob medida</b><small>Personalizações e projetos sob consulta.</small></div></div><div><span>📲</span><div><b>Atendimento próximo</b><small>Converse diretamente com a AFLarte pelo WhatsApp.</small></div></div></div></section>
-
 <section id="produtos" class="catalog wrap">
   <div class="section-head"><div><span class="eyebrow">NOSSO CATÁLOGO</span><h2>Escolha por categoria</h2></div><div class="searchbox"><input id="search" type="search" placeholder="Buscar produto..." aria-label="Buscar produto"></div></div>
-  <div class="filters" id="filters">
-    <button class="active" data-cat="todos">Todos</button><button data-cat="sensoriais">Sensoriais</button><button data-cat="personalizados">Personalizados</button><button data-cat="crista">Decoração Cristã</button><button data-cat="infantil">Infantil</button><button data-cat="colecionaveis">Colecionáveis</button>
-  </div>
-  <div id="grid" class="grid"></div>
-  <p id="empty" class="empty" hidden>Nenhum produto encontrado.</p>
+  <div class="filters" id="filters"><button class="active" data-cat="todos">Todos</button><button data-cat="sensoriais">Sensoriais</button><button data-cat="personalizados">Personalizados</button><button data-cat="crista">Decoração Cristã</button><button data-cat="infantil">Infantil</button><button data-cat="colecionaveis">Colecionáveis</button></div>
+  <div id="grid" class="grid"></div><p id="empty" class="empty" hidden>Nenhum produto encontrado.</p>
 </section>
 <section id="como-comprar" class="how"><div class="wrap"><div class="section-head"><div><span class="eyebrow">SEM COMPLICAÇÃO</span><h2>Como comprar</h2></div></div><div class="steps"><article><i>1</i><h3>Escolha</h3><p>Navegue pelo catálogo e abra os detalhes do produto.</p></article><article><i>2</i><h3>Adicione ao carrinho</h3><p>Escolha vários produtos e ajuste as quantidades antes de enviar.</p></article><article><i>3</i><h3>Revise e envie</h3><p>Abra o carrinho e envie todos os itens em uma única mensagem pelo WhatsApp.</p></article></div></div></section>
 <section class="warning"><div class="wrap warning-box"><div>⚠️</div><div><b>Informação importante sobre brinquedos sensoriais</b><p>Recomendados para maiores de 3 anos. Produtos em PLA não devem ser levados à boca. A utilização por crianças deve ocorrer com supervisão de um adulto.</p></div></div></section>
@@ -67,9 +58,11 @@
 </main>
 <footer><div class="wrap foot"><div class="brand"><img src="assets/logo.webp" alt="AFLarte"><span><b>AFLarte</b><small>Artes e Personalizados</small></span></div><p>Catálogo online • Pedidos pelo WhatsApp</p></div></footer>
 
-<div class="modal" id="modal" aria-hidden="true"><div class="backdrop" data-close></div><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="x" data-close aria-label="Fechar">×</button><div class="gallery-view"><img id="modalImg" alt=""><div id="thumbs" class="thumbs" aria-label="Galeria de fotos"></div></div><div class="dialog-body"><span id="modalCat" class="pill"></span><h2 id="modalTitle"></h2><div id="modalPrice" class="modal-price"></div><p id="modalDesc"></p><div id="modalVariants" class="variants" hidden></div><div id="modalExtra" class="extra"></div><button id="modalAdd" class="btn primary full" type="button">Adicionar ao carrinho</button></div></div></div>
+<button id="mobileCartDock" class="mobile-cart-dock" type="button" aria-label="Abrir carrinho"><span>🛒 Ver carrinho</span><strong id="mobileCartCount">0</strong></button>
 
+<div class="modal" id="modal" aria-hidden="true"><div class="backdrop" data-close></div><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="x" data-close aria-label="Fechar">×</button><div class="gallery-view"><img id="modalImg" alt=""><div id="thumbs" class="thumbs" aria-label="Galeria de fotos"></div></div><div class="dialog-body"><span id="modalCat" class="pill"></span><h2 id="modalTitle"></h2><div id="modalPrice" class="modal-price"></div><p id="modalDesc"></p><div id="modalVariants" class="variants" hidden></div><div id="modalExtra" class="extra"></div><button id="modalAdd" class="btn primary full" type="button">Adicionar ao carrinho</button></div></div></div>
 <div class="modal cart-modal" id="cartModal" aria-hidden="true"><div class="backdrop" data-cart-close></div><div class="cart-dialog" role="dialog" aria-modal="true" aria-labelledby="cartTitle"><button class="x" data-cart-close aria-label="Fechar carrinho">×</button><div class="cart-head"><span class="eyebrow">SEU PEDIDO</span><h2 id="cartTitle">Carrinho de compras</h2><p>Revise os produtos e quantidades. Depois envie tudo em uma única mensagem pelo WhatsApp.</p></div><div id="cartItems" class="cart-items"></div><div id="cartEmpty" class="cart-empty">Seu carrinho está vazio.</div><div class="cart-footer"><button id="clearCart" class="btn soft" type="button">Limpar carrinho</button><a id="sendCart" class="btn green" target="_blank" rel="noopener">Enviar pedido pelo WhatsApp</a></div></div></div>
 <script src="assets/app.js"></script>
+<script src="assets/mobile.js"></script>
 </body>
 </html>
