@@ -1,26 +1,8 @@
 (async()=>{try{const r=await fetch('https://ldzvozipodwkyeuekaqw.supabase.co/functions/v1/catalog-public',{cache:'no-store'});if(!r.ok)return;const data=await r.json();if(!Array.isArray(data.products))return;const mapped=data.products.map(p=>({id:p.id,name:p.name,price:p.price_label,cat:p.category,label:p.category_label,img:p.main_image||'assets/logo.webp',gallery:Array.isArray(p.gallery)?p.gallery:[],short:p.short_description||'',desc:p.description||'',extra:p.extra||'',variants:Array.isArray(p.variants)&&p.variants.length?p.variants:undefined,featured:!!p.featured}));products.splice(0,products.length,...mapped);
-
-function rebuildCategoryFilters(){
-  const box=document.getElementById('filters');
-  if(!box)return;
-  const preferred=['sensoriais','personalizados','crista','infantil','colecionaveis'];
-  const labels=new Map();
-  products.forEach(p=>{if(p.cat)labels.set(p.cat,p.label||p.cat);});
-  const ordered=[...preferred.filter(c=>labels.has(c)),...[...labels.keys()].filter(c=>!preferred.includes(c)).sort((a,b)=>(labels.get(a)||a).localeCompare(labels.get(b)||b,'pt-BR'))];
-  const previous=typeof current!=='undefined'?current:'todos';
-  box.innerHTML=`<button data-cat="todos">Todos</button>`+ordered.map(c=>`<button data-cat="${String(c).replace(/"/g,'&quot;')}">${String(labels.get(c)||c).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</button>`).join('');
-  const available=new Set(['todos',...ordered]);
-  if(typeof current!=='undefined'&&!available.has(current))current='todos';
-  box.querySelectorAll('[data-cat]').forEach(btn=>{
-    if(btn.dataset.cat===(available.has(previous)?previous:'todos'))btn.classList.add('active');
-    btn.onclick=()=>{
-      box.querySelectorAll('[data-cat]').forEach(x=>x.classList.remove('active'));
-      btn.classList.add('active');
-      if(typeof current!=='undefined')current=btn.dataset.cat;
-      render();
-    };
-  });
-}
-
-rebuildCategoryFilters();
-render();}catch(e){console.warn('Catálogo online indisponível; usando versão local.',e);}})();
+const safe=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+function categories(){const preferred=['sensoriais','personalizados','crista','infantil','colecionaveis'];const labels=new Map();products.forEach(p=>{if(p.cat)labels.set(p.cat,p.label||p.cat)});const ordered=[...preferred.filter(c=>labels.has(c)),...[...labels.keys()].filter(c=>!preferred.includes(c)).sort((a,b)=>(labels.get(a)||a).localeCompare(labels.get(b)||b,'pt-BR'))];return{labels,ordered}}
+function goCategory(cat){current=cat;document.querySelectorAll('#filters [data-cat]').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat));render();document.getElementById('produtos')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function rebuildCategoryFilters(){const box=document.getElementById('filters');if(!box)return;const {labels,ordered}=categories();const previous=typeof current!=='undefined'?current:'todos';box.innerHTML=`<button data-cat="todos">Todos</button>`+ordered.map(c=>`<button data-cat="${safe(c)}">${safe(labels.get(c)||c)}</button>`).join('');const available=new Set(['todos',...ordered]);if(typeof current!=='undefined'&&!available.has(current))current='todos';box.querySelectorAll('[data-cat]').forEach(btn=>{if(btn.dataset.cat===(available.has(previous)?previous:'todos'))btn.classList.add('active');btn.onclick=()=>goCategory(btn.dataset.cat)})}
+function rebuildHomeCategories(){const box=document.querySelector('.home-category-grid');if(!box)return;const {labels,ordered}=categories();const icons={sensoriais:'🧩',personalizados:'🎁',crista:'✝️',infantil:'🧸',colecionaveis:'🐉',natal:'🎄',pascoa:'🐰'};const desc={sensoriais:'Texturas, movimentos, foco e diversão.',personalizados:'Nomes, lembranças e peças sob encomenda.',crista:'Mensagens de fé para presentear e decorar.',infantil:'Decoração e peças afetivas personalizadas.',colecionaveis:'Peças articuladas e itens de destaque.',natal:'Peças especiais para celebrar o Natal.',pascoa:'Presentes e decoração para a Páscoa.'};box.innerHTML=ordered.map(c=>`<button type="button" class="home-category-card" data-home-dynamic="${safe(c)}"><span class="category-icon">${icons[c]||'✨'}</span><span class="category-copy"><b>${safe(labels.get(c)||c)}</b><small>${safe(desc[c]||'Explore os produtos desta categoria.')}</small></span><span class="category-arrow">→</span></button>`).join('')+`<button type="button" class="home-category-card all-products" data-home-dynamic="todos"><span class="category-icon">✨</span><span class="category-copy"><b>Ver tudo</b><small>Explore o catálogo completo da AFLarte.</small></span><span class="category-arrow">→</span></button>`;box.querySelectorAll('[data-home-dynamic]').forEach(b=>b.onclick=()=>goCategory(b.dataset.homeDynamic))}
+function rebuildFeatured(){const box=document.querySelector('.featured-grid');if(!box)return;let list=products.filter(p=>p.featured);if(!list.length)list=products.slice(0,4);box.innerHTML=list.map(p=>`<article class="featured-card"><div class="featured-img"><span class="featured-badge">${safe(p.label||'AFLarte')}</span><img src="${safe(p.img||'assets/logo.webp')}" alt="${safe(p.name)}"></div><div class="featured-copy"><h3>${safe(p.name)}</h3><p>${safe(p.short||p.desc||'Peça produzida pela AFLarte.')}</p><strong>${safe(p.price)}</strong><div class="featured-actions"><button type="button" class="btn soft" data-feature-view="${safe(p.id)}">Detalhes</button><button type="button" class="btn primary" data-feature-add="${safe(p.id)}">${p.variants?.length?'Escolher opção':'Adicionar'}</button></div></div></article>`).join('');box.querySelectorAll('[data-feature-view]').forEach(b=>b.onclick=()=>openModal(b.dataset.featureView));box.querySelectorAll('[data-feature-add]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.featureAdd);if(p?.variants?.length)openModal(p.id);else addToCart(p.id)})}
+rebuildCategoryFilters();rebuildHomeCategories();rebuildFeatured();render();}catch(e){console.warn('Catálogo online indisponível; usando versão local.',e);}})();
