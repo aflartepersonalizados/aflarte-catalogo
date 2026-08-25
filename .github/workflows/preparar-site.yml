@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'site.zip'
+      - 'site-compact.zip'
       - '.github/workflows/preparar-site.yml'
   workflow_dispatch:
 
@@ -22,13 +22,13 @@ jobs:
         shell: bash
         run: |
           set -e
-          if [ ! -f site.zip ]; then
-            echo "Arquivo site.zip não encontrado."
+          if [ ! -f site-compact.zip ]; then
+            echo "Arquivo site-compact.zip não encontrado."
             exit 1
           fi
           rm -rf docs
           mkdir -p docs
-          unzip -q site.zip -d docs
+          unzip -q site-compact.zip -d docs
           rm -f docs/netlify.toml
           touch docs/.nojekyll
 
