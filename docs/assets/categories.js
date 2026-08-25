@@ -142,3 +142,34 @@ document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener(
   style.textContent=`.checkout-details{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}.checkout-title h3{font-family:"Playfair Display",serif;font-size:25px;margin:6px 0 6px}.checkout-title p{margin:0 0 16px;color:var(--muted);line-height:1.5;font-size:13px}.checkout-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.checkout-field{display:flex;flex-direction:column;gap:6px}.checkout-field.full{grid-column:1/-1}.checkout-field>span{font-size:13px;font-weight:800}.checkout-field>span b{color:#b04f43}.checkout-field input,.checkout-field textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 13px;font:inherit;color:var(--ink);outline:none}.checkout-field textarea{resize:vertical;min-height:82px}.checkout-field input:focus,.checkout-field textarea:focus{border-color:#c78c7e;box-shadow:0 0 0 3px #f4e4df}.checkout-error{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff0ed;color:#9b4037;font-size:13px;font-weight:700}.cart-footer{margin-top:16px}@media(max-width:620px){.checkout-fields{grid-template-columns:1fr}.checkout-field.full{grid-column:auto}.checkout-title h3{font-size:22px}.checkout-details{margin-top:18px;padding-top:18px}}`;
   document.head.appendChild(style);
 })();
+
+(function improveSeoAndSharing(){
+  const base='https://aflartepersonalizados.github.io/aflarte-catalogo/';
+  const title='AFLarte | Produtos em Impressão 3D, Sensoriais e Personalizados';
+  const desc='Conheça o catálogo da AFLarte: brinquedos sensoriais, decoração, presentes e produtos personalizados em impressão 3D. Monte seu pedido e envie pelo WhatsApp.';
+  const image=base+'assets/kit-rosa.webp';
+  document.title=title;
+  const metaDesc=document.querySelector('meta[name="description"]')||document.head.appendChild(document.createElement('meta'));
+  metaDesc.setAttribute('name','description'); metaDesc.setAttribute('content',desc);
+  const setMeta=(attr,key,value)=>{let el=document.head.querySelector(`meta[${attr}="${key}"]`);if(!el){el=document.createElement('meta');el.setAttribute(attr,key);document.head.appendChild(el);}el.setAttribute('content',value);};
+  setMeta('property','og:type','website');
+  setMeta('property','og:locale','pt_BR');
+  setMeta('property','og:site_name','AFLarte');
+  setMeta('property','og:title',title);
+  setMeta('property','og:description',desc);
+  setMeta('property','og:url',base);
+  setMeta('property','og:image',image);
+  setMeta('name','twitter:card','summary_large_image');
+  setMeta('name','twitter:title',title);
+  setMeta('name','twitter:description',desc);
+  setMeta('name','twitter:image',image);
+  let canonical=document.head.querySelector('link[rel="canonical"]');if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical);}canonical.href=base;
+  let icon=document.head.querySelector('link[rel="icon"]');if(!icon){icon=document.createElement('link');icon.rel='icon';document.head.appendChild(icon);}icon.href='favicon.svg';icon.type='image/svg+xml';
+  let manifest=document.head.querySelector('link[rel="manifest"]');if(!manifest){manifest=document.createElement('link');manifest.rel='manifest';document.head.appendChild(manifest);}manifest.href='site.webmanifest';
+  if(!document.getElementById('aflarteStructuredData')){
+    const ld=document.createElement('script');ld.type='application/ld+json';ld.id='aflarteStructuredData';ld.textContent=JSON.stringify({
+      '@context':'https://schema.org','@type':'Store',name:'AFLarte',url:base,image:image,description:desc,
+      sameAs:['https://instagram.com/aflarte'],telephone:'+55 41 98805-1258',areaServed:'BR'
+    });document.head.appendChild(ld);
+  }
+})();
