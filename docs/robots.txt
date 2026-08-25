@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aflartepersonalizados.github.io/aflarte-catalogo/sitemap.xml
