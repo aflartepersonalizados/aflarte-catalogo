@@ -1,0 +1,46 @@
+name: Preparar catálogo AFLarte
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site.zip'
+      - '.github/workflows/preparar-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  preparar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar pasta docs
+        shell: bash
+        run: |
+          set -e
+          if [ ! -f site.zip ]; then
+            echo "Arquivo site.zip não encontrado."
+            exit 1
+          fi
+          rm -rf docs
+          mkdir -p docs
+          unzip -q site.zip -d docs
+          rm -f docs/netlify.toml
+          touch docs/.nojekyll
+
+      - name: Salvar site pronto
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração para salvar."
+            exit 0
+          fi
+          git commit -m "Publica catálogo AFLarte em docs"
+          git push
