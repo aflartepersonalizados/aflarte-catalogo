@@ -76,3 +76,69 @@ document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener(
   style.textContent=`.faq-section{padding:72px 0;background:#fff;border-top:1px solid var(--line)}.faq-head{max-width:720px;margin-bottom:26px}.faq-head h2{font-family:"Playfair Display",serif;font-size:42px;margin:8px 0}.faq-head p{margin:0;color:var(--muted);line-height:1.6}.faq-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}.faq-list details{background:#fffaf7;border:1px solid var(--line);border-radius:16px;padding:0 18px;overflow:hidden}.faq-list summary{list-style:none;cursor:pointer;font-weight:800;padding:18px 34px 18px 0;position:relative}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary:after{content:'+';position:absolute;right:0;top:14px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f3dfd8;color:#7d554d;font-size:20px}.faq-list details[open] summary:after{content:'–'}.faq-list details p{margin:0;padding:0 0 18px;color:var(--muted);line-height:1.62;font-size:14px}.faq-cta{margin-top:20px;background:#302724;color:#fff;border-radius:20px;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}.faq-cta>div{display:flex;flex-direction:column;gap:3px}.faq-cta span{color:#d9cbc6;font-size:14px}.faq-cta .btn{white-space:nowrap}@media(max-width:800px){.faq-list{grid-template-columns:1fr}.faq-head h2{font-size:34px}.faq-cta{align-items:flex-start;flex-direction:column}.faq-cta .btn{width:100%}}@media(max-width:620px){.faq-section{padding:52px 0}.faq-list details{padding:0 15px}.faq-list summary{padding-top:16px;padding-bottom:16px;font-size:15px}}`;
   document.head.appendChild(style);
 })();
+
+(function enhanceCheckout(){
+  const dialog=document.querySelector('.cart-dialog');
+  const footer=document.querySelector('.cart-footer');
+  const send=document.getElementById('sendCart');
+  if(!dialog||!footer||!send||document.getElementById('checkoutDetails')) return;
+
+  const saved=JSON.parse(localStorage.getItem('aflarteCustomer')||'{}');
+  const box=document.createElement('section');
+  box.id='checkoutDetails';
+  box.className='checkout-details';
+  box.innerHTML=`<div class="checkout-title"><span class="eyebrow">DADOS PARA O ATENDIMENTO</span><h3>Antes de enviar pelo WhatsApp</h3><p>Preencha seu nome e, se quiser, acrescente sua cidade e uma observação. Assim o atendimento já recebe o pedido mais organizado.</p></div>
+  <div class="checkout-fields">
+    <label class="checkout-field"><span>Nome <b>*</b></span><input id="customerName" type="text" autocomplete="name" maxlength="80" placeholder="Seu nome" value="${(saved.name||'').replace(/"/g,'&quot;')}"></label>
+    <label class="checkout-field"><span>Cidade / Bairro</span><input id="customerCity" type="text" autocomplete="address-level2" maxlength="100" placeholder="Ex.: Curitiba — Boa Vista" value="${(saved.city||'').replace(/"/g,'&quot;')}"></label>
+    <label class="checkout-field full"><span>Observação</span><textarea id="customerNote" rows="3" maxlength="300" placeholder="Ex.: preferência de cor, nome para personalização ou outra informação importante">${saved.note||''}</textarea></label>
+  </div>
+  <div id="checkoutError" class="checkout-error" hidden>Informe seu nome antes de enviar o pedido.</div>`;
+  footer.parentNode.insertBefore(box,footer);
+
+  const name=document.getElementById('customerName');
+  const city=document.getElementById('customerCity');
+  const note=document.getElementById('customerNote');
+  const error=document.getElementById('checkoutError');
+
+  function saveCustomer(){localStorage.setItem('aflarteCustomer',JSON.stringify({name:name.value.trim(),city:city.value.trim(),note:note.value.trim()}));}
+  [name,city,note].forEach(el=>el.addEventListener('input',()=>{saveCustomer();if(name.value.trim()) error.hidden=true;}));
+
+  function buildMessage(){
+    const lines=['Olá AFLarte! Vim pelo catálogo e gostaria de solicitar este pedido:',''];
+    cart.forEach((item,index)=>{
+      const p=products.find(x=>x.id===item.id);
+      if(!p) return;
+      const v=p.variants?.find(x=>x.id===item.variantId);
+      const option=v?` — Opção: ${v.label}`:'';
+      const price=v?.price||p.price;
+      lines.push(`${index+1}. ${p.name}${option}`);
+      lines.push(`Quantidade: ${item.qty} • Valor: ${price}`);
+      lines.push('');
+    });
+    lines.push(`Cliente: ${name.value.trim()}`);
+    if(city.value.trim()) lines.push(`Cidade/Bairro: ${city.value.trim()}`);
+    if(note.value.trim()) lines.push(`Observação: ${note.value.trim()}`);
+    lines.push('');
+    lines.push('Aguardo a conferência de valores, prazo e disponibilidade.');
+    return lines.join('\n');
+  }
+
+  send.addEventListener('click',e=>{
+    e.preventDefault();
+    if(!cart.length) return;
+    if(!name.value.trim()){
+      error.hidden=false;
+      name.focus();
+      name.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    saveCustomer();
+    const url=`https://wa.me/${WA}?text=${encodeURIComponent(buildMessage())}`;
+    window.open(url,'_blank','noopener');
+  },true);
+
+  const style=document.createElement('style');
+  style.textContent=`.checkout-details{margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}.checkout-title h3{font-family:"Playfair Display",serif;font-size:25px;margin:6px 0 6px}.checkout-title p{margin:0 0 16px;color:var(--muted);line-height:1.5;font-size:13px}.checkout-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.checkout-field{display:flex;flex-direction:column;gap:6px}.checkout-field.full{grid-column:1/-1}.checkout-field>span{font-size:13px;font-weight:800}.checkout-field>span b{color:#b04f43}.checkout-field input,.checkout-field textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px 13px;font:inherit;color:var(--ink);outline:none}.checkout-field textarea{resize:vertical;min-height:82px}.checkout-field input:focus,.checkout-field textarea:focus{border-color:#c78c7e;box-shadow:0 0 0 3px #f4e4df}.checkout-error{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff0ed;color:#9b4037;font-size:13px;font-weight:700}.cart-footer{margin-top:16px}@media(max-width:620px){.checkout-fields{grid-template-columns:1fr}.checkout-field.full{grid-column:auto}.checkout-title h3{font-size:22px}.checkout-details{margin-top:18px;padding-top:18px}}`;
+  document.head.appendChild(style);
+})();
