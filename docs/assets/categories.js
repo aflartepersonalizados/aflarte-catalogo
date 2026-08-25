@@ -1,0 +1,1 @@
+document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener('click',()=>{const cat=btn.dataset.homeCat;const target=document.querySelector(`[data-cat="${cat}"]`);if(target){target.click();setTimeout(()=>document.getElementById('produtos')?.scrollIntoView({behavior:'smooth',block:'start'}),50);}});});
