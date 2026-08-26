@@ -1,0 +1,23 @@
+(()=>{
+  const API='https://ldzvozipodwkyeuekaqw.supabase.co/functions/v1/melhorenvio-quote';
+  let selected=null;
+  const money=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const price=value=>{const n=Number(String(value||'').replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.'));return Number.isFinite(n)&&n>0?n:0.01};
+  const dimensions=p=>({weight:Number(p.shipping_weight_kg||p.shipping?.weight_kg),length:Number(p.shipping_length_cm||p.shipping?.length_cm),width:Number(p.shipping_width_cm||p.shipping?.width_cm),height:Number(p.shipping_height_cm||p.shipping?.height_cm)});
+  function cartProducts(){
+    if(typeof cart==='undefined'||typeof products==='undefined')return[];
+    return cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return null;const d=dimensions(p),v=item.variantId&&p.variants?.find(x=>x.id===item.variantId);return{id:p.id,name:p.name,width:d.width,height:d.height,length:d.length,weight:d.weight,insurance_value:price(v?.price||p.price),quantity:item.qty||1}}).filter(Boolean);
+  }
+  function init(){
+    const address=document.getElementById('deliveryAddressBox'),cep=document.getElementById('customerCep');
+    if(!address||!cep||document.getElementById('freightQuoteBox'))return;
+    const box=document.createElement('section');box.id='freightQuoteBox';box.className='freight-quote-box';box.innerHTML='<button id="calculateFreight" class="btn primary" type="button">Calcular frete</button><div id="freightResult" class="freight-result" hidden></div>';
+    const status=document.getElementById('cepStatus');(status||address.firstElementChild).insertAdjacentElement('afterend',box);
+    const style=document.createElement('style');style.textContent='.freight-quote-box{display:grid;gap:10px;margin:10px 0}.freight-quote-box>.btn{width:100%}.freight-result{display:grid;gap:8px}.freight-option{display:flex!important;align-items:center;gap:10px;border:1px solid #e1d6d1;border-radius:12px;background:#fff;padding:11px 12px;cursor:pointer}.freight-option input{width:auto!important;margin:0}.freight-option span{display:grid;gap:2px;font-weight:700}.freight-option small{font-weight:400;color:#756864}.freight-error{padding:10px;border-radius:10px;background:#fff0ed;color:#9b4037;font-size:13px;font-weight:700}';document.head.appendChild(style);
+    const button=document.getElementById('calculateFreight'),result=document.getElementById('freightResult');
+    button.onclick=async()=>{const postal=cep.value.replace(/\D/g,'');if(postal.length!==8){result.innerHTML='<div class="freight-error">Informe um CEP válido.</div>';result.hidden=false;return}const payload=cartProducts(),missing=payload.find(p=>![p.width,p.height,p.length,p.weight].every(n=>Number.isFinite(n)&&n>0));if(missing){result.innerHTML='<div class="freight-error">O produto “'+missing.name+'” ainda não possui peso e dimensões. A AFLarte confirmará o frete pelo WhatsApp.</div>';result.hidden=false;return}button.disabled=true;button.textContent='Calculando...';selected=null;try{const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to_postal_code:postal,products:payload})}),data=await response.json();if(!response.ok)throw new Error(data.error||'Não foi possível calcular o frete.');if(!data.quotes?.length)throw new Error('Não há serviço disponível para este CEP.');result.innerHTML=data.quotes.map((q,i)=>'<label class="freight-option"><input type="radio" name="freightService" value="'+i+'"><span>'+q.company+' '+q.name+' — '+money(q.price)+'<small>Prazo estimado: '+(q.delivery_range?`${q.delivery_range.min} a ${q.delivery_range.max}`:q.delivery_time)+' dias úteis</small></span></label>').join('');result.querySelectorAll('input').forEach(input=>input.onchange=()=>selected=data.quotes[Number(input.value)])}catch(e){result.innerHTML='<div class="freight-error">'+e.message+'</div>'}finally{result.hidden=false;button.disabled=false;button.textContent='Calcular frete'}};
+    cep.addEventListener('input',()=>{selected=null;result.hidden=true});
+    document.getElementById('sendCart')?.addEventListener('click',()=>{if(!selected)return;const send=document.getElementById('sendCart');try{const u=new URL(send.href);let text=u.searchParams.get('text')||'';text=text.replace(/Taxa de envio: a calcular conforme o CEP\/endereço\./,'Frete: '+selected.company+' '+selected.name+' — '+money(selected.price)+' (prazo estimado: '+selected.delivery_time+' dias úteis)');u.searchParams.set('text',text);send.href=u.toString()}catch{}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
