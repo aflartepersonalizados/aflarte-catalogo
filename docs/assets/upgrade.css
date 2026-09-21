@@ -47,3 +47,23 @@ body{background:linear-gradient(180deg,#fff 0,#fbfcff 46%,#fff 100%)}
 .order-review{background:linear-gradient(145deg,#f7fcfb,#faf8fc);border-color:#dce9e5}
 .mobile-cart-dock{background:linear-gradient(110deg,#51485e,#746780 55%,#55796f);box-shadow:0 16px 38px rgba(75,63,92,.28)}
 @media(max-width:700px){.hero{background:radial-gradient(circle at 90% 4%,rgba(217,201,238,.42),transparent 26%),radial-gradient(circle at 5% 36%,rgba(185,221,243,.35),transparent 28%),#fff}.hero-card{box-shadow:0 18px 45px rgba(75,63,92,.11)}}
+
+/* AFLarte full-brand storefront */
+.announce{background:linear-gradient(90deg,#fff0eb,#f6efff 35%,#eefaff 68%,#effaf5);border-bottom:1px solid #eee6ef;font-size:12px;color:#51495a}
+.announce .wrap{min-height:34px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.topbar .brand img{width:88px;height:62px;object-fit:contain;box-shadow:none;border-radius:0}
+.nav{height:82px}.nav nav{gap:19px}.nav nav a{font-size:13px}
+.hero{padding:54px 0 48px}.hero-grid{grid-template-columns:1.03fr .97fr}
+.hero h1{font-family:"DM Sans",sans-serif;font-weight:700;line-height:1.04}
+.hero h1 em{display:block;font-family:"Playfair Display",serif;font-weight:700}
+.hero-art-card{min-height:470px;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.98),rgba(248,244,252,.9) 55%,rgba(225,244,239,.75));position:relative}
+.hero-art-card>img{width:min(88%,520px);max-height:440px;object-fit:contain;filter:drop-shadow(0 20px 24px rgba(99,70,78,.12))}
+.hero-art-card>div.hero-brand-note{display:block;position:absolute;left:24px;right:24px;bottom:18px;padding:10px 14px;text-align:center;border-radius:999px;background:rgba(255,255,255,.88);color:#725a78;font-size:12px;font-weight:800;letter-spacing:.05em;backdrop-filter:blur(8px)}
+.benefits{margin-top:-1px}.benefit-grid>div{position:relative}.benefit-grid>div:before{content:"";position:absolute;left:18px;right:18px;top:0;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--af-blue),var(--af-lilac),var(--af-mint),var(--af-rose))}
+.home-categories-head h2,.featured-head h2,.section-head h2,.contact h2{font-family:"DM Sans",sans-serif;font-weight:700;letter-spacing:-.025em}
+.home-category-card,.featured-card,.card{border-radius:20px}
+.home-category-card{overflow:hidden;position:relative}.home-category-card:after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-34px;bottom:-40px;background:rgba(217,201,238,.18)}
+.featured-actions .btn,.actions .btn{border-radius:12px}
+footer{background:linear-gradient(180deg,#fff,#f8fbff);border-top:1px solid #e8e3ec}.foot{min-height:150px}.foot .brand img{width:120px;height:110px;object-fit:contain}.foot>p:last-child{color:#766d7d}
+@media(max-width:900px){.announce .wrap{justify-content:center}.announce span:nth-child(2),.announce span:nth-child(3){display:none}.topbar .brand img{width:74px;height:54px}.nav{height:70px}.hero-art-card{min-height:390px}}
+@media(max-width:700px){.announce .wrap{min-height:30px;font-size:11px}.announce span:last-child{display:none}.hero{padding-top:28px}.hero-art-card{min-height:330px}.hero-art-card>img{width:min(92%,390px)}.foot .brand img{width:96px;height:90px}.foot{align-items:center;text-align:center}.topbar .brand img{width:66px;height:50px}}
