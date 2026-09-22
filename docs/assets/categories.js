@@ -81,7 +81,7 @@ document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener(
   const dialog=document.querySelector('.cart-dialog');
   const footer=document.querySelector('.cart-footer');
   const send=document.getElementById('sendCart');
-  if(!dialog||!footer||!send||document.getElementById('checkoutDetails')) return;
+  return; /* checkout legado desativado: checkout.js controla o e-commerce */
 
   const saved=JSON.parse(localStorage.getItem('aflarteCustomer')||'{}');
   const box=document.createElement('section');
