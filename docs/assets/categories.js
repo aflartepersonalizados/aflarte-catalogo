@@ -19,7 +19,7 @@ document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener(
       <article><span>🖨️</span><div><b>Produção própria</b><p>Controle de produção e acabamento em peças impressas em 3D.</p></div></article>
       <article><span>🎨</span><div><b>Personalização</b><p>Projetos podem receber nomes, cores, temas e detalhes especiais.</p></div></article>
       <article><span>💬</span><div><b>Atendimento direto</b><p>Você conversa com a AFLarte pelo WhatsApp para tirar dúvidas e fechar o pedido.</p></div></article>
-      <article><span>📦</span><div><b>Pedido revisado</b><p>Monte o carrinho, revise tudo e envie os itens juntos em uma única mensagem.</p></div></article>
+      <article><span>📦</span><div><b>Pedido revisado</b><p>Monte o carrinho, informe seus dados e finalize a compra com pagamento online seguro.</p></div></article>
     </div>
   </div>`;
   how.parentNode.insertBefore(section,how);
@@ -49,14 +49,14 @@ document.querySelectorAll('[data-home-cat]').forEach(btn=>{btn.addEventListener(
       <p>Respostas rápidas sobre pedido, personalização, produção e segurança.</p>
     </div>
     <div class="faq-list">
-      <details><summary>Como faço um pedido?</summary><p>Escolha os produtos, selecione tamanho ou opção quando houver, adicione ao carrinho, revise as quantidades e envie o pedido completo pelo WhatsApp.</p></details>
+      <details><summary>Como faço um pedido?</summary><p>Escolha os produtos, selecione tamanho ou opção quando houver, adicione ao carrinho, informe seus dados e finalize o pagamento online.</p></details>
       <details><summary>Os produtos personalizados têm preço fixo?</summary><p>Nem sempre. O valor pode variar conforme tamanho, quantidade, cores, nome, tema e complexidade. Nesses casos o catálogo mostra “Consulte” ou “A partir de”, e o valor final é confirmado pelo WhatsApp.</p></details>
       <details><summary>Qual é o prazo de produção?</summary><p>O prazo depende do produto, da quantidade e da personalização. A previsão é informada no atendimento antes da confirmação do pedido.</p></details>
       <details><summary>De que material são feitas as peças?</summary><p>A maior parte das peças é produzida em impressão 3D com PLA. Pequenas marcas do processo por camadas podem ocorrer e fazem parte da característica da impressão 3D.</p></details>
       <details><summary>Os brinquedos sensoriais podem ser levados à boca?</summary><p>Não. São recomendados para maiores de 3 anos, não devem ser levados à boca e devem ser usados por crianças com supervisão de um adulto.</p></details>
       <details><summary>Posso escolher cores e personalizar um produto?</summary><p>Em muitos produtos, sim. As possibilidades dependem do modelo e da disponibilidade de cores. Envie sua ideia pelo WhatsApp para verificar as opções.</p></details>
-      <details><summary>Como funciona o pagamento?</summary><p>As formas de pagamento disponíveis são informadas no atendimento antes da confirmação do pedido, junto com o orçamento final quando necessário.</p></details>
-      <details><summary>O carrinho já confirma a compra?</summary><p>Não. O carrinho organiza os itens e envia tudo em uma única mensagem. A compra é confirmada somente após a conferência de valores, personalizações, prazo e demais detalhes pelo WhatsApp.</p></details>
+      <details><summary>Como funciona o pagamento?</summary><p>Para produtos com preço definido, o pagamento é feito online pelo Mercado Pago. Produtos sob consulta continuam sujeitos a orçamento.</p></details>
+      <details><summary>O carrinho já confirma a compra?</summary><p>Para produtos com preço definido, o carrinho segue para o checkout e pagamento online. Itens sob consulta ou com preço variável precisam de orçamento antes da confirmação.</p></details>
     </div>
     <div class="faq-cta"><div><b>Ficou alguma dúvida?</b><span>Fale diretamente com a AFLarte.</span></div><a class="btn green" target="_blank" rel="noopener" href="https://wa.me/5541988051258?text=Ol%C3%A1%20AFLarte!%20Estou%20no%20cat%C3%A1logo%20e%20tenho%20uma%20d%C3%BAvida.">Perguntar pelo WhatsApp</a></div>
   </div>`;
