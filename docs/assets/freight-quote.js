@@ -3,7 +3,7 @@
   let selected=null;window.aflarteSelectedFreight=null;
   const money=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   const price=value=>{const n=Number(String(value||'').replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.'));return Number.isFinite(n)&&n>0?n:0.01};
-  const dimensions=(p,v)=>{const s=v?.shipping||p.shipping||{};return{weight:Number(p.shipping_weight_kg||s.weight_kg||(s.weight_g?Number(s.weight_g)/1000:0)),length:Number(p.shipping_length_cm||s.length_cm),width:Number(p.shipping_width_cm||s.width_cm),height:Number(p.shipping_height_cm||s.height_cm)}};
+  const dimensions=(p,v)=>{const s=v?.shipping||p.shipping||{};const raw={weight:Number(p.shipping_weight_kg||s.weight_kg||(s.weight_g?Number(s.weight_g)/1000:0)),length:Number(p.shipping_length_cm||s.length_cm),width:Number(p.shipping_width_cm||s.width_cm),height:Number(p.shipping_height_cm||s.height_cm)};return{weight:raw.weight,length:raw.length?Math.max(16,raw.length):0,width:raw.width?Math.max(11,raw.width):0,height:raw.height?Math.max(2,raw.height):0}};
   function cartProducts(){
     if(typeof cart==='undefined'||typeof products==='undefined')return[];
     return cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return null;const v=item.variantId&&p.variants?.find(x=>x.id===item.variantId),d=dimensions(p,v);return{id:p.id,name:p.name,width:d.width,height:d.height,length:d.length,weight:d.weight,insurance_value:price(v?.price||p.price),quantity:item.qty||1}}).filter(Boolean);
