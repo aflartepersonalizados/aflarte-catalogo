@@ -45,7 +45,7 @@ function render(){
   const list=products.filter(p=>(current==='todos'||p.cat===current)&&(!q||(`${p.name} ${p.short} ${p.label}`).toLowerCase().includes(q)));
   grid.innerHTML=list.map(card).join('');
   empty.hidden=!!list.length;
-  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openModal(b.dataset.view));\n  document.querySelectorAll('.card-photo').forEach(photo=>{photo.style.cursor='pointer';photo.setAttribute('role','button');photo.setAttribute('tabindex','0');const id=photo.closest('.card')?.querySelector('[data-view]')?.dataset.view;if(!id)return;photo.onclick=()=>openModal(id);photo.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(id)}};});
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openModal(b.dataset.view));
   document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.add); if(p?.variants) openModal(p.id); else addToCart(p.id);});
 }
 filters.forEach(b=>b.onclick=()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');current=b.dataset.cat;render();});
