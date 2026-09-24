@@ -53,9 +53,16 @@ search.addEventListener('input',render);
 
 const modal=document.getElementById('modal');
 function setModalImage(src,p){
-  const img=document.getElementById('modalImg');
-  img.src=src; img.alt=p.name;
+  const img=document.getElementById('modalImg'), video=document.getElementById('modalVideo');
+  if(video){video.pause();video.hidden=true;video.removeAttribute('src');}
+  img.hidden=false; img.src=src; img.alt=p.name;
   document.querySelectorAll('#thumbs .thumb').forEach(t=>t.classList.toggle('active',t.dataset.src===src));
+}
+function setModalVideo(src,p){
+  const img=document.getElementById('modalImg'), video=document.getElementById('modalVideo');
+  if(!video||!src)return;
+  img.hidden=true; video.hidden=false; video.src=src; video.setAttribute('aria-label','Vídeo de '+p.name);
+  document.querySelectorAll('#thumbs .thumb').forEach(t=>t.classList.toggle('active',t.dataset.video===src));
 }
 function renderVariantPicker(p){
   const box=document.getElementById('modalVariants');
@@ -77,8 +84,9 @@ function openModal(id){
   const p=products.find(x=>x.id===id); if(!p)return;
   selectedProduct=p;
   const photos=[p.img,...(p.gallery||[])];
-  document.getElementById('thumbs').innerHTML=photos.map((src,i)=>`<button class="thumb ${i===0?'active':''}" type="button" data-src="${src}" aria-label="Foto ${i+1} de ${p.name}"><img src="${src}" alt=""></button>`).join('');
-  document.querySelectorAll('#thumbs .thumb').forEach(t=>t.onclick=()=>setModalImage(t.dataset.src,p));
+  document.getElementById('thumbs').innerHTML=photos.map((src,i)=>`<button class="thumb ${i===0?'active':''}" type="button" data-src="${src}" aria-label="Foto ${i+1} de ${p.name}"><img src="${src}" alt=""></button>`).join('')+(p.video?`<button class="thumb video-thumb" type="button" data-video="${p.video}" aria-label="Vídeo de ${p.name}"><span>▶</span></button>`:'');
+  document.querySelectorAll('#thumbs .thumb[data-src]').forEach(t=>t.onclick=()=>setModalImage(t.dataset.src,p));
+  document.querySelectorAll('#thumbs .thumb[data-video]').forEach(t=>t.onclick=()=>setModalVideo(t.dataset.video,p));
   setModalImage(photos[0],p);
   document.getElementById('modalCat').textContent=p.label;
   document.getElementById('modalTitle').textContent=p.name;
