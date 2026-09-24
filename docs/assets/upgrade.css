@@ -121,3 +121,10 @@ footer{background:#f8f7fa}.foot{min-height:190px}.foot .brand img{width:170px;he
 @media(max-width:700px){.hero h1{font-size:46px}.hero-copy>p{font-size:16px}.hero-art-card{min-height:340px}.home-categories{padding-top:55px}.home-category-grid{grid-template-columns:1fr 1fr}.home-category-card{min-height:155px}.featured,.catalog{padding-top:58px}.catalog .section-head{padding:20px}.brand-banner strong{font-size:29px}.contact{padding:55px 0}.contact-card{padding:28px 22px}}
 
 .payment-return-banner{position:fixed;z-index:9999;top:16px;left:50%;transform:translateX(-50%);width:min(92vw,680px);background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.18);padding:16px 18px;display:flex;gap:16px;align-items:center;justify-content:space-between}.payment-return-banner div{display:grid;gap:3px}.payment-return-banner strong{font-size:1rem}.payment-return-banner span{font-size:.9rem;line-height:1.35}.payment-return-banner button{border:0;background:transparent;font-size:24px;cursor:pointer}
+
+/* Galeria: suporte a video vertical 9:16 */
+.gallery-view #modalVideo{display:block;width:100%;max-width:100%;height:min(70vh,720px);aspect-ratio:9/16;object-fit:contain;margin:0 auto;border-radius:18px;background:#111}
+.gallery-view #modalVideo[hidden]{display:none}
+.thumbs .video-thumb{display:grid;place-items:center;aspect-ratio:1/1;background:linear-gradient(145deg,#f4eff9,#edf7fc);font-size:24px;color:#51485e}
+.thumbs .video-thumb.active{outline:2px solid #a98abe;outline-offset:2px}
+@media(max-width:700px){.gallery-view #modalVideo{height:min(62vh,620px);border-radius:14px}}
