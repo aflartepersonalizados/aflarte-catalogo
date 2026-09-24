@@ -128,3 +128,15 @@ footer{background:#f8f7fa}.foot{min-height:190px}.foot .brand img{width:170px;he
 .thumbs .video-thumb{display:grid;place-items:center;aspect-ratio:1/1;background:linear-gradient(145deg,#f4eff9,#edf7fc);font-size:24px;color:#51485e}
 .thumbs .video-thumb.active{outline:2px solid #a98abe;outline-offset:2px}
 @media(max-width:700px){.gallery-view #modalVideo{height:min(62vh,620px);border-radius:14px}}
+
+/* Vitrine rotativa do topo - isolada do catalogo */
+.hero-art-card{position:relative;overflow:hidden}
+.hero-rotator{width:100%;height:100%;min-height:500px;border:0;background:transparent;padding:18px;display:grid;place-items:center;cursor:pointer;font:inherit;color:inherit}
+.hero-rotator>img{display:block;width:100%;height:440px;object-fit:contain;border-radius:22px;background:#fff;transition:opacity .3s ease,transform .3s ease}
+.hero-rotator>img.hero-fade{opacity:.15;transform:scale(.985)}
+.hero-rotator-caption{position:absolute;left:34px;right:34px;bottom:35px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 17px;border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(48,39,36,.12);text-align:left}
+.hero-rotator-caption b{font-size:15px;line-height:1.25}.hero-rotator-caption small{font-size:14px;font-weight:800;white-space:nowrap;color:#31785b}
+.hero-rotator-dots{position:absolute;z-index:4;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:7px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.82)}
+.hero-rotator-dots button{border:0;width:8px;height:8px;padding:0;border-radius:999px;background:#c9c0ce;cursor:pointer}.hero-rotator-dots button.active{width:24px;background:#8e75a7}
+@media(max-width:900px){.hero-rotator{min-height:420px}.hero-rotator>img{height:360px}}
+@media(max-width:700px){.hero-rotator{min-height:340px;padding:10px}.hero-rotator>img{height:290px}.hero-rotator-caption{left:18px;right:18px;bottom:30px;padding:10px 12px}.hero-rotator-caption b{font-size:13px}.hero-rotator-caption small{font-size:12px}}
