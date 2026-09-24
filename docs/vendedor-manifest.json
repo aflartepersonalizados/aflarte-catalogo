@@ -1,0 +1,9 @@
+{
+  "name": "AFLarte Tabela de Preços",
+  "short_name": "AFLarte Preços",
+  "start_url": "/vendedor.html",
+  "display": "standalone",
+  "background_color": "#f7f5f8",
+  "theme_color": "#6d4aa2",
+  "icons": []
+}
