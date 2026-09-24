@@ -1,9 +1,18 @@
 {
   "name": "AFLarte Tabela de Preços",
   "short_name": "AFLarte Preços",
+  "id": "/vendedor.html",
   "start_url": "/vendedor.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f7f5f8",
   "theme_color": "#6d4aa2",
-  "icons": []
+  "icons": [
+    {
+      "src": "/assets/logo.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
 }
