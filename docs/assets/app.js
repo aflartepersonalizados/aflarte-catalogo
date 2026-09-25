@@ -32,6 +32,14 @@ let selectedProduct=null;
 let selectedVariantId=null;
 let rawCart=JSON.parse(localStorage.getItem('aflarteCart')||'[]');
 let cart=rawCart.map(i=>({id:i.id||i.productId,variantId:i.variantId||null,qty:i.qty||1}));
+try{
+  const paidOrder=sessionStorage.getItem('aflarteLastOrder')||sessionStorage.getItem('aflarteLastPaidOrder');
+  if(paidOrder){
+    cart=[];
+    rawCart=[];
+    localStorage.removeItem('aflarteCart');
+  }
+}catch(e){}
 
 /* Retorno do Mercado Pago: só esvazia o carrinho quando o próprio
    back_url da AFLarte informa que o pagamento foi aprovado. */
