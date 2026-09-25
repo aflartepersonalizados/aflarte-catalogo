@@ -33,6 +33,23 @@ let selectedVariantId=null;
 let rawCart=JSON.parse(localStorage.getItem('aflarteCart')||'[]');
 let cart=rawCart.map(i=>({id:i.id||i.productId,variantId:i.variantId||null,qty:i.qty||1}));
 
+/* Retorno do Mercado Pago: só esvazia o carrinho quando o próprio
+   back_url da AFLarte informa que o pagamento foi aprovado. */
+(function clearCartAfterApprovedPayment(){
+  const params=new URLSearchParams(window.location.search);
+  const approved=params.get('pagamento')==='aprovado';
+  const order=params.get('pedido');
+  if(!approved || !order) return;
+  cart=[];
+  localStorage.removeItem('aflarteCart');
+  try{sessionStorage.setItem('aflarteLastPaidOrder',order);}catch(e){}
+  params.delete('pagamento');
+  params.delete('pedido');
+  const query=params.toString();
+  const cleanUrl=window.location.pathname+(query?'?'+query:'')+window.location.hash;
+  window.history.replaceState({},document.title,cleanUrl);
+})();
+
 function card(p){
   return `<article class="card" data-name="${p.name.toLowerCase()}" data-cat="${p.cat}">
     <div class="card-photo"><img loading="lazy" src="${p.img}" alt="${p.name}">${(p.gallery&&p.gallery.length)?`<span class="photo-count">📷 ${p.gallery.length+1} fotos</span>`:''}</div>
