@@ -140,3 +140,32 @@ footer{background:#f8f7fa}.foot{min-height:190px}.foot .brand img{width:170px;he
 .hero-rotator-dots button{border:0;width:8px;height:8px;padding:0;border-radius:999px;background:#c9c0ce;cursor:pointer}.hero-rotator-dots button.active{width:24px;background:#8e75a7}
 @media(max-width:900px){.hero-rotator{min-height:420px}.hero-rotator>img{height:360px}}
 @media(max-width:700px){.hero-rotator{min-height:340px;padding:10px}.hero-rotator>img{height:290px}.hero-rotator-caption{left:18px;right:18px;bottom:30px;padding:10px 12px}.hero-rotator-caption b{font-size:13px}.hero-rotator-caption small{font-size:12px}}
+
+
+/* AFLarte Storefront 2026.09 — acabamento profissional e confiança */
+:root{--af-navy:#2e2a3a;--af-blue-strong:#79bde2;--af-purple-strong:#a786c5;--af-green-strong:#72b7a3;--af-coral:#e8a39c}
+.wrap{width:min(1380px,calc(100% - 48px))}
+.announce .wrap{max-width:1380px}
+.nav{max-width:1380px}
+.hero-grid{max-width:1380px}
+.hero-copy{position:relative;z-index:2}
+.hero-copy:after{content:"AFLarte • produção própria";display:inline-flex;margin-top:22px;padding:8px 12px;border-radius:10px;background:#fff;color:#5f5667;font-size:11px;font-weight:800;box-shadow:0 8px 24px rgba(72,58,83,.07)}
+.hero-art-card{background:radial-gradient(circle at 50% 45%,#fff 0 38%,rgba(234,247,252,.82) 64%,rgba(238,231,247,.76) 100%);border:1px solid rgba(255,255,255,.9);border-radius:34px}
+.hero-art-card:before{content:"";position:absolute;inset:14px;border:1px solid rgba(167,134,197,.13);border-radius:25px;pointer-events:none}
+.benefit-grid>div{transition:background .2s ease}.benefit-grid>div:hover{background:#fcfaff}
+.benefit-grid b{color:#3b3443}
+.home-categories,.featured,.catalog{position:relative}
+.home-category-card{transition:transform .2s ease,box-shadow .2s ease}.home-category-card:hover{transform:translateY(-4px)}
+.featured-card,.card{transition:transform .2s ease,box-shadow .2s ease}.featured-card:hover,.card:hover{transform:translateY(-5px)}
+.featured-copy h3,.card h3{color:#332d39}
+.featured-copy strong,.price{color:#257653}
+.filters{gap:8px}.filters button{transition:.18s}.filters button:hover{border-color:#bba7cd;background:#faf7fc}
+.how .wrap:before{content:"Compra simples, atendimento humano e produção própria";display:block;text-align:center;margin:0 auto 12px;color:#817589;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.steps{gap:24px}.steps article{position:relative;overflow:hidden}.steps article:after{content:"";position:absolute;width:90px;height:90px;right:-40px;bottom:-42px;border-radius:50%;background:linear-gradient(135deg,rgba(185,221,243,.32),rgba(217,201,238,.28))}
+.warning-box{box-shadow:0 8px 26px rgba(88,69,50,.05)}
+.contact-card{box-shadow:0 24px 65px rgba(59,48,68,.2)}
+.contact-card .btn.green{background:#fff;color:#326e5d}.contact-card .btn.green:hover{box-shadow:0 8px 22px rgba(0,0,0,.12)}
+footer .foot p{line-height:1.5}
+@media(min-width:1500px){.hero-grid{min-height:620px}.hero h1{font-size:86px}.featured-grid,.grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:900px){.wrap{width:min(100% - 30px,1380px)}}
+@media(max-width:620px){.wrap{width:min(100% - 24px,1380px)}.hero-copy:after{margin-top:14px}.hero-art-card{border-radius:24px}}
