@@ -169,3 +169,31 @@ footer .foot p{line-height:1.5}
 @media(min-width:1500px){.hero-grid{min-height:620px}.hero h1{font-size:86px}.featured-grid,.grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:900px){.wrap{width:min(100% - 30px,1380px)}}
 @media(max-width:620px){.wrap{width:min(100% - 24px,1380px)}.hero-copy:after{margin-top:14px}.hero-art-card{border-radius:24px}}
+
+
+/* AFLarte Home — compactação da primeira dobra ultrawide + confiança */
+@media(min-width:1200px){
+  .hero-grid{min-height:500px;grid-template-columns:1.08fr .92fr;gap:44px}
+  .hero-copy{padding:46px 0 42px}
+  .hero h1{font-size:clamp(54px,4.7vw,76px);max-width:690px;margin:15px 0}
+  .hero-copy>p{font-size:16px;line-height:1.62;max-width:600px}
+  .hero-actions{margin-top:24px}
+  .micro{margin-top:20px}
+  .hero-copy:after{margin-top:16px}
+  .hero-art-card{min-height:430px;max-height:455px}
+  .hero-rotator{min-height:430px;padding:14px}
+  .hero-rotator>img{height:380px}
+  .hero-rotator-caption{bottom:28px}
+  .benefits{margin-top:-24px}
+  .benefit-grid>div{min-height:88px;padding:17px 20px}
+  .home-categories{padding-top:62px}
+}
+@media(min-width:1700px){
+  .wrap,.nav,.hero-grid{max-width:1480px}
+  .hero-grid{min-height:510px}
+  .hero h1{font-size:78px}
+}
+.benefit-grid>div:nth-child(1) b:before{content:"✓ ";color:#4e9d83}
+.benefit-grid>div:nth-child(2) b:before{content:"✓ ";color:#4e9d83}
+.benefit-grid>div:nth-child(3) b:before{content:"✓ ";color:#4e9d83}
+.benefit-grid>div:nth-child(4) b:before{content:"✓ ";color:#4e9d83}
