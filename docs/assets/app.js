@@ -88,7 +88,7 @@ search.addEventListener('input',render);
 const modal=document.getElementById('modal');
 function setModalImage(src,p){
   const img=document.getElementById('modalImg'), video=document.getElementById('modalVideo');
-  if(video){video.pause();video.hidden=true;video.removeAttribute('src');}
+  if(video){video.hidden=true;video.removeAttribute('src');}
   img.hidden=false; img.src=src; img.alt=p.name;
   document.querySelectorAll('#thumbs .thumb').forEach(t=>t.classList.toggle('active',t.dataset.src===src));
 }
