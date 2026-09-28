@@ -88,14 +88,15 @@ search.addEventListener('input',render);
 const modal=document.getElementById('modal');
 function setModalImage(src,p){
   const img=document.getElementById('modalImg'), video=document.getElementById('modalVideo');
-  if(video){video.hidden=true;video.removeAttribute('src');}
+  if(video){if(video._aflFrame){video._aflFrame.remove();video._aflFrame=null;} video.hidden=true;video.removeAttribute('src'); video.innerHTML='';}
   img.hidden=false; img.src=src; img.alt=p.name;
   document.querySelectorAll('#thumbs .thumb').forEach(t=>t.classList.toggle('active',t.dataset.src===src));
 }
 function setModalVideo(src,p){
   const img=document.getElementById('modalImg'), video=document.getElementById('modalVideo');
   if(!video||!src)return;
-  img.hidden=true; video.hidden=false; video.src=src; video.setAttribute('aria-label','Vídeo de '+p.name);
+  if(video._aflFrame){video._aflFrame.remove();video._aflFrame=null;}
+  img.hidden=true; video.hidden=false; video.removeAttribute('src'); video.innerHTML=''; const isDrive=/drive\.google\.com\/file\/d\//i.test(src); if(isDrive){ const frame=document.createElement('iframe'); frame.src=src; frame.title='Vídeo de '+p.name; frame.allow='autoplay; encrypted-media'; frame.allowFullscreen=true; frame.style.cssText='width:100%;height:100%;border:0;border-radius:18px;background:#111'; video.hidden=true; video.parentNode.insertBefore(frame,video); video._aflFrame=frame; } else { video.src=src; video.setAttribute('aria-label','Vídeo de '+p.name); video.load(); }
   document.querySelectorAll('#thumbs .thumb').forEach(t=>t.classList.toggle('active',t.dataset.video===src));
 }
 function renderVariantPicker(p){
