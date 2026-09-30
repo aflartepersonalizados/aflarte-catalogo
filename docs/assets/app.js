@@ -144,6 +144,23 @@ function addToCart(id,variantId=null){
   const found=cart.find(i=>itemKey(i.id,i.variantId)===itemKey(id,variantId));
   if(found) found.qty+=1; else cart.push({id,variantId,qty:1});
   saveCart();
+  if(typeof gtag==="function"){
+  const v=getVariant(p,variantId);
+  const rawPrice=v?.price||p.price||"0";
+  const price=parseFloat(String(rawPrice).replace(/[^\d,.-]/g,"").replace(/\./g,"").replace(",", "."))||0;
+
+  gtag("event","add_to_cart",{
+    currency:"BRL",
+    value:price,
+    items:[{
+      item_id:p.id,
+      item_name:p.name,
+      item_variant:v?.label||"",
+      price:price,
+      quantity:1
+    }]
+  });
+}
   const btn=document.querySelector(`[data-add="${id}"]`);
   if(btn&&!p.variants){const old=btn.textContent;btn.textContent='✓ Adicionado';setTimeout(()=>btn.textContent=old,900);}
 }
