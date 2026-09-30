@@ -7,3 +7,20 @@
 @media(max-width:720px){.nav-actions .wa{display:none}.cart-dialog{padding:22px 16px}.cart-head h2{font-size:30px}.cart-footer{flex-direction:column}.cart-item{grid-template-columns:72px 1fr}.cart-item>img{width:72px;height:72px}.actions{grid-template-columns:1fr 1fr}.nav{gap:10px}.brand span{display:none}}
 
 .variants{margin:18px 0}.variant-title{font-weight:800;margin-bottom:10px}.variant-title span{color:#b04f43}.variant-options{display:grid;gap:9px}.variant-option{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff;cursor:pointer;transition:.15s}.variant-option:hover{border-color:#cda094}.variant-option.selected{border-color:#b56d60;background:#fff5f1;box-shadow:0 0 0 3px rgba(181,109,96,.10)}.variant-option input{accent-color:#b56d60;width:18px;height:18px;margin:0}.variant-option span{display:flex;flex-direction:column;gap:2px}.variant-option small{color:var(--muted);font-size:12px}.variant-hint{margin-top:8px;color:var(--muted);font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}.cart-variant{font-size:13px!important;font-weight:700!important;color:#8e655b!important}
+
+
+/* Rodape institucional AFLarte */
+.site-footer{border-top:1px solid var(--line);background:#fff7f6;padding:38px 0 0}
+.footer-inner{display:flex;flex-direction:column;align-items:center}
+.footer-social{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:28px}
+.footer-social a{color:#a653b8;text-decoration:none;font-weight:800;font-size:14px}
+.footer-social a:hover{text-decoration:underline}
+.footer-links{display:flex;justify-content:center;gap:14px 28px;flex-wrap:wrap;max-width:1050px;text-align:center}
+.footer-links a{color:#a653b8;text-decoration:none;font-size:13px}
+.footer-links a:hover{text-decoration:underline}
+.footer-payment{margin:30px 0 24px;padding:14px 24px;border:1px solid #e7cfe9;background:#fff;border-radius:12px;display:flex;align-items:center;gap:12px;color:#6c586d;font-size:13px}
+.footer-payment strong{color:#3f3340}
+.footer-bottom{width:100%;border-top:1px solid #ecdfea;min-height:100px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.footer-bottom p{color:var(--muted);font-size:13px}
+.footer-bottom .brand img{width:52px;height:52px;object-fit:contain}
+@media(max-width:620px){.site-footer{padding-top:30px}.footer-social{gap:16px 22px}.footer-links{gap:12px 18px}.footer-payment{margin-top:26px}.footer-bottom{flex-direction:column;align-items:center;text-align:center;justify-content:center;padding:22px 0}.footer-bottom p{margin:0}}
