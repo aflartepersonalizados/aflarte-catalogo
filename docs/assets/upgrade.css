@@ -277,3 +277,8 @@ footer{background:#fff;border-top:1px solid #ececf2}
 
 /* Menu principal centralizado — 2026-10-03 */
 @media(min-width:901px){.nav nav{justify-content:center;padding-left:24px;padding-right:24px}}
+
+
+/* Menu principal realmente centralizado e ajustado a largura — 2026-10-03 */
+@media(min-width:901px){.topbar .nav nav{left:0;right:0;transform:none;width:100%;padding-left:20px;padding-right:20px;justify-content:center;gap:clamp(10px,1.55vw,21px)}}
+@media(min-width:901px) and (max-width:1100px){.topbar .nav nav a{font-size:12px}.topbar .nav nav{gap:10px}}
