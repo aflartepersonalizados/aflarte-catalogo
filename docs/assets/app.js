@@ -27,6 +27,7 @@ const grid=document.getElementById('grid');
 const search=document.getElementById('search');
 const filters=[...document.querySelectorAll('[data-cat]')];
 const empty=document.getElementById('empty');
+const sortProducts=document.getElementById('sortProducts');
 let current='todos';
 let selectedProduct=null;
 let selectedVariantId=null;
@@ -65,9 +66,25 @@ function card(p){
       <div class="actions"><button class="btn soft" type="button" data-view="${p.id}">Detalhes</button><button class="btn primary" type="button" data-add="${p.id}">${p.variants?'Escolher opção':'Adicionar'}</button></div>
     </div></article>`;
 }
+function sortPrice(p){
+  const values=[];
+  const sources=p.variants?.length?p.variants.map(v=>v.price):[p.price];
+  sources.forEach(s=>{const m=String(s||'').match(/R\$\s*([\d.]+(?:,\d{1,2})?)/i);if(m)values.push(Number(m[1].replace(/\./g,'').replace(',','.')));});
+  return values.length?Math.min(...values):null;
+}
+function sortList(list){
+  const mode=sortProducts?.value||'default';
+  const out=[...list];
+  const byName=(a,b)=>a.name.localeCompare(b.name,'pt-BR',{sensitivity:'base'});
+  if(mode==='az')out.sort(byName);
+  if(mode==='za')out.sort((a,b)=>byName(b,a));
+  if(mode==='price-asc')out.sort((a,b)=>{const pa=sortPrice(a),pb=sortPrice(b);if(pa===null)return 1;if(pb===null)return -1;return pa-pb||byName(a,b);});
+  if(mode==='price-desc')out.sort((a,b)=>{const pa=sortPrice(a),pb=sortPrice(b);if(pa===null)return 1;if(pb===null)return -1;return pb-pa||byName(a,b);});
+  return out;
+}
 function render(){
   const q=search.value.trim().toLowerCase();
-  const list=products.filter(p=>(current==='todos'||p.cat===current)&&(!q||(`${p.name} ${p.short} ${p.label}`).toLowerCase().includes(q)));
+  const list=sortList(products.filter(p=>(current==='todos'||p.cat===current)&&(!q||(`${p.name} ${p.short} ${p.label}`).toLowerCase().includes(q))));
   grid.innerHTML=list.map(card).join('');
   empty.hidden=!!list.length;
   document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openModal(b.dataset.view));
@@ -84,6 +101,7 @@ function render(){
 }
 filters.forEach(b=>b.onclick=()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');current=b.dataset.cat;render();});
 search.addEventListener('input',render);
+sortProducts?.addEventListener('change',render);
 
 const modal=document.getElementById('modal');
 function setModalImage(src,p){
