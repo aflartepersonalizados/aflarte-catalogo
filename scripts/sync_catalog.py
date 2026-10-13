@@ -7,6 +7,21 @@ def slug(s):
     return re.sub('[^a-z0-9]+', '-', unicodedata.normalize('NFKD', str(s)).encode('ascii','ignore').decode().lower()).strip('-')
 def esc(s): return html.escape(str(s or ''), quote=True)
 def js(data): return json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
+def fixed_price(p):
+    if p.get('variants'): return None
+    match=re.fullmatch(r'\s*R\$\s*([\d.]+,\d{2})\s*',str(p.get('price_label') or ''))
+    if not match: return None
+    value=float(match[1].replace('.','').replace(',','.'))
+    return round(value,2) if value>0 else None
+CATEGORY_COPY={
+ 'sensoriais':('Produtos sensoriais em impressão 3D','Explore peças com diferentes texturas e movimentos, como fidgets, alfabetos e kits sensoriais. Veja as fotos, opções e recomendações de cada produto.'),
+ 'brinquedos-e-educativos':('Brinquedos e educativos em impressão 3D','Conheça brinquedos articulados, jogos e peças criativas produzidas pela AFLarte. Consulte as características e recomendações de uso na página de cada produto.'),
+ 'personalizados':('Presentes personalizados em impressão 3D','Encontre peças e lembranças personalizadas. Consulte as opções de cada produto ou fale com a AFLarte para combinar a sua personalização.'),
+ 'decoracao-crista':('Decoração cristã em impressão 3D','Explore peças com mensagens de fé para decorar e presentear. Conheça os modelos e as opções disponíveis na AFLarte.'),
+ 'chaveiros':('Chaveiros em impressão 3D','Conheça os chaveiros da AFLarte e consulte fotos, modelos e opções de personalização em cada página de produto.'),
+ 'natal':('Decoração e presentes de Natal em impressão 3D','Explore enfeites, peças decorativas e presentes natalinos produzidos pela AFLarte. Confira fotos, preços e opções de cada modelo.'),
+ 'dia-dos-professores':('Presentes para o Dia dos Professores','Conheça lembranças, chaveiros e peças para presentear professores. Consulte as opções disponíveis e combine a personalização com a AFLarte.')
+}
 def visible(p):
     def no(v): return v is False or str(v).lower().strip() in ('false','não','nao','inativo','0')
     return not no(p.get('active')) and not no(p.get('site_visible'))
@@ -45,6 +60,21 @@ def generate(data, docs):
         b=re.sub(r'(<div[^>]*id="filters"[^>]*>).*?</div>',lambda m:m[1]+filters+'</div>',b,flags=re.S)
         extra=f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="https://aflarte.com.br{path}">'
         if schema:extra+='<script type="application/ld+json">'+js(schema)+'</script>'
+        image=(schema or {}).get('image',[])
+        extra+='<meta property="og:image" content="'+esc(image[0] if image else 'https://aflarte.com.br/assets/logo.webp')+'"><meta property="og:site_name" content="AFLarte"><meta property="og:locale" content="pt_BR">'
+        if path=='/':
+            org={'@context':'https://schema.org','@type':'Organization','@id':'https://aflarte.com.br/#organization','name':'AFLarte','url':'https://aflarte.com.br/','logo':'https://aflarte.com.br/assets/logo.webp','sameAs':['https://www.instagram.com/aflarte/','https://www.facebook.com/profile.php?id=61593775059751','https://www.tiktok.com/@aflarte']}
+            site={'@context':'https://schema.org','@type':'WebSite','name':'AFLarte','alternateName':'AFLarte Personalizados 3D','url':'https://aflarte.com.br/'}
+            extra+=''.join('<script type="application/ld+json">'+js(x)+'</script>' for x in [org,site])
+        else:
+            crumbs=[{'@type':'ListItem','position':1,'name':'Início','item':'https://aflarte.com.br/'}]
+            if schema:
+                product=next(p for p in ps if routes[p['id']]==path)
+                crumbs.append({'@type':'ListItem','position':2,'name':cats[product['category']],'item':'https://aflarte.com.br/categorias/'+product['category']+'/'})
+                name=product['name']
+            else:name=cats.get(path.strip('/').split('/')[-1],'Catálogo de produtos')
+            crumbs.append({'@type':'ListItem','position':len(crumbs)+1,'name':name,'item':'https://aflarte.com.br'+path})
+            extra+='<script type="application/ld+json">'+js({'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':crumbs})+'</script>'
         return b.replace('</head>',extra+'</head>')
     def grid(b,items):
         return re.sub(r'(<div id="grid" class="grid"[^>]*>).*?(</div><p id="empty")',lambda m:m[1]+cards(items)+m[2],b,count=1,flags=re.S)
@@ -55,12 +85,16 @@ def generate(data, docs):
     files['index.html']=home
     files['catalogo/index.html']=grid(page('listing','Catálogo de produtos | AFLarte','Explore os produtos AFLarte.','/catalogo/'),ps)
     for c,l in cats.items():
-        b=page('listing',l+' | AFLarte','Conheça '+l+' da AFLarte.','/categorias/'+c+'/')
-        b=b.replace('Catálogo de produtos AFLarte',esc(l)+' AFLarte').replace('</head>','<script>window.afCategory='+js(c)+'</script></head>')
+        heading,description=CATEGORY_COPY.get(c,(l+' AFLarte','Conheça '+l+' da AFLarte.'))
+        b=page('listing',heading+' | AFLarte',description,'/categorias/'+c+'/')
+        b=b.replace('Catálogo de produtos AFLarte',esc(heading)).replace('Explore nossas categorias e encontre sua próxima peça favorita.',esc(description)).replace('</head>','<script>window.afCategory='+js(c)+'</script></head>')
         files['categorias/'+c+'/index.html']=grid(b,[p for p in ps if p['category']==c])
     for p in ps:
         u=routes[p['id']]; c=p['category']
         schema={'@context':'https://schema.org','@type':'Product','name':p['name'],'description':p['description'] or p['short_description'],'image':[x for x in [p['main_image']]+(p['gallery'] or []) if x],'brand':{'@type':'Brand','name':'AFLarte'},'url':'https://aflarte.com.br'+u}
+        schema['sku']=p['id']
+        amount=fixed_price(p)
+        if amount is not None:schema['offers']={'@type':'Offer','price':amount,'priceCurrency':'BRL','url':'https://aflarte.com.br'+u}
         b=page('product',p['name']+' | AFLarte',p['short_description'] or p['description'] or p['name'],u,schema)
         main='<main><div class="wrap product-container"><nav aria-label="Caminho de navegação"><a href="/">Início</a> / <a href="/categorias/'+c+'/">'+esc(cats[c])+'</a></nav><h1>'+esc(p['name'])+'</h1><noscript><img style="max-width:100%" src="'+esc(p['main_image'])+'" alt="'+esc(p['name'])+'"></noscript><p>'+esc(p['description'])+'</p><p>'+esc(p['price_label'])+'</p></div><section class="wrap related"><h2>Mais desta categoria</h2><div class="grid">'+cards([q for q in ps if q['category']==c and q['id']!=p['id']][:4])+'</div></section><div hidden><input id="search"><div id="grid"></div><div id="empty"></div><div id="filters">'+filters+'</div></div></main>'
         b=re.sub(r'<main>.*?</main>',lambda _:main,b,count=1,flags=re.S).replace('</head>','<script>window.afProductPage='+js(p['id'])+'</script></head>')
