@@ -36,9 +36,10 @@ try{
 })();
 
 function card(p){
+  const productUrl=window.afProductRoutes[p.id]||'/produto.html?id='+encodeURIComponent(p.id);
   return `<article class="card" data-name="${p.name.toLowerCase()}" data-cat="${p.cat}">
-    <div class="card-photo"><img loading="lazy" src="${p.img}" alt="${p.name}">${(p.gallery&&p.gallery.length)?`<span class="photo-count">📷 ${p.gallery.length+1} fotos</span>`:''}</div>
-    <div class="card-body"><span class="pill">${p.label}</span><h3>${p.name}</h3><div class="short">${p.short}</div><div class="price">${p.price}</div>
+    <a class="card-photo" href="${productUrl}" aria-label="Ver ${p.name}"><img loading="lazy" src="${p.img}" alt="${p.name}">${(p.gallery&&p.gallery.length)?`<span class="photo-count">📷 ${p.gallery.length+1} fotos</span>`:''}</a>
+    <div class="card-body"><span class="pill">${p.label}</span><h3><a href="${productUrl}">${p.name}</a></h3><div class="short">${p.short}</div><div class="price">${p.price}</div>
       <div class="actions"><a class="btn soft" href="${window.afProductRoutes[p.id]||'/produto.html?id='+encodeURIComponent(p.id)}">Ver produto</a><button class="btn primary" type="button" data-add="${p.id}">${p.variants?'Escolher opção':'Adicionar'}</button></div>
     </div></article>`;
 }
@@ -49,15 +50,6 @@ function render(){
   grid.innerHTML=list.map(card).join('');
   empty.hidden=!!list.length;
   document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openModal(b.dataset.view));
-  document.querySelectorAll('.card-photo').forEach(photo=>{
-    photo.style.cursor='pointer';
-    photo.setAttribute('role','button');
-    photo.setAttribute('tabindex','0');
-    const id=photo.closest('.card')?.querySelector('[data-view]')?.dataset.view;
-    if(!id)return;
-    photo.onclick=()=>openModal(id);
-    photo.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(id);}};
-  });
   document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.add); if(p?.variants) openModal(p.id); else addToCart(p.id);});
 }
 filters.forEach(b=>b.onclick=()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');current=b.dataset.cat;render();});
