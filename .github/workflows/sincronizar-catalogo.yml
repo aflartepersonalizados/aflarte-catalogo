@@ -1,0 +1,35 @@
+name: Sincronizar produtos da planilha mestre
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main, teste-paginas-aflarte]
+    paths: ['scripts/**', '.github/workflows/sincronizar-catalogo.yml']
+permissions:
+  contents: write
+concurrency:
+  group: catalogo-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Atualizar páginas com catálogo público
+        run: python scripts/sync_catalog.py
+      - name: Publicar apenas quando houver mudanças
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Catálogo sem alterações; nenhuma publicação necessária."
+            exit 0
+          fi
+          git commit -m "Sincroniza produtos da planilha mestre"
+          git push
