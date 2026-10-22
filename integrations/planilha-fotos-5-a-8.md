@@ -11,7 +11,14 @@ A aba `CADASTRO MESTRE AFLARTE` mantém todas as colunas A:AB nas posições atu
 
 ## Ajuste do Apps Script vinculado
 
-No código existente de `sincronizarProdutosAFLarte`, amplie o intervalo de leitura de 28 para 32 colunas (A:AF). Preserve a linha inicial, a quantidade de linhas e todas as outras opções da leitura atual.
+Nas capturas do código atual, a função `sincronizarProdutosAFLarte` lê 28 colunas. Troque a leitura por:
+
+```js
+// A:AF — cadastro mestre, fotos, vídeos e controles do site
+const values = sheet.getRange(4, 1, lastRow - 3, 32).getValues();
+```
+
+Preserve todas as outras opções da leitura e do processamento.
 
 No mesmo objeto de produto que já envia `image_2`, `image_3` e `image_4`, acrescente:
 
@@ -22,9 +29,26 @@ image_7: String(r[30] || '').trim(),
 image_8: String(r[31] || '').trim(),
 ```
 
-Use o nome real da variável da linha; `r` é o nome usado no código anteriormente fornecido. Mantenha o segredo da integração, os acionadores, os vídeos (W e AB), destaques (X:Y), ativo no site (Z) e catálogo sensorial (AA) como estão. Se houver uma proteção de intervalo no acionador, inclua AC:AF na faixa observada.
+Nas capturas verificadas, a variável da linha é `r`. Ao acrescentar as chaves depois de `sensory_catalog_video`, inclua uma vírgula no final dessa propriedade existente. Mantenha o segredo da integração, os acionadores, os vídeos (W e AB), destaques (X:Y), ativo no site (Z) e catálogo sensorial (AA) como estão. Se houver uma proteção de intervalo no acionador, inclua AC:AF na faixa observada.
 
 As quatro chaves devem ser enviadas mesmo vazias: vazio limpa a foto opcional; chave ausente mantém as fotos opcionais já salvas, para compatibilidade com clientes antigos.
+
+### Ordenação dos produtos
+
+A função atual `ordenarProdutosAflarte` também limita seu intervalo a 28 colunas. Troque apenas o último argumento do `aba.getRange` de `28` para `32`:
+
+```js
+const intervalo = aba.getRange(
+  primeiraLinha,
+  1,
+  ultimaLinha - primeiraLinha + 1,
+  32
+);
+```
+
+Esse ajuste faz as fotos de AC:AF acompanharem o produto quando a planilha é ordenada. Preserve `intervalo.sort({ column: 1, ascending: true });`.
+
+Salve o projeto e execute `sincronizarProdutosAFLarte` (a função de configuração da integração não é necessária para essa alteração).
 
 ## Backend e site
 
@@ -36,4 +60,4 @@ O teste SQL cobre oito fotos, colunas intermediárias vazias, remoção das foto
 
 ## Estado em 22/10/2026
 
-Colunas AC:AF criadas e backend preparado. A edição e a verificação do Apps Script vinculado dependem de acesso à sessão Google do proprietário. Não considerar a integração completa antes de uma nova foto preenchida em AC:AF chegar à API pública após a execução do sincronizador.
+Colunas AC:AF criadas e backend preparado. O código atual foi conferido nas cinco capturas fornecidas pelo proprietário; os ajustes de leitura, envio e ordenação ainda precisam ser aplicados no editor dele, pois a sessão remota Google não foi autenticada. Não considerar a integração completa antes de uma nova foto preenchida em AC:AF chegar à API pública após a execução do sincronizador.
