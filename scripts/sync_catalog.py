@@ -14,6 +14,7 @@ def fixed_price(p):
     value=float(match[1].replace('.','').replace(',','.'))
     return round(value,2) if value>0 else None
 CATEGORY_COPY={
+ 'dia-a-dia':('Utilidades para o dia a dia em impressão 3D','Conheça peças práticas da AFLarte para organizar e facilitar a rotina. Confira fotos, características e cuidados de uso em cada produto.'),
  'sensoriais':('Produtos sensoriais em impressão 3D','Explore peças com diferentes texturas e movimentos, como fidgets, alfabetos e kits sensoriais. Veja as fotos, opções e recomendações de cada produto.'),
  'brinquedos-e-educativos':('Brinquedos e educativos em impressão 3D','Conheça brinquedos articulados, jogos e peças criativas produzidas pela AFLarte. Consulte as características e recomendações de uso na página de cada produto.'),
  'personalizados':('Presentes personalizados em impressão 3D','Encontre peças e lembranças personalizadas. Consulte as opções de cada produto ou fale com a AFLarte para combinar a sua personalização.'),
