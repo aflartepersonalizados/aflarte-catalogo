@@ -21,6 +21,7 @@ CATEGORY_COPY={
  'decoracao-crista':('Decoração cristã em impressão 3D','Explore peças com mensagens de fé para decorar e presentear. Conheça os modelos e as opções disponíveis na AFLarte.'),
  'chaveiros':('Chaveiros em impressão 3D','Conheça os chaveiros da AFLarte e consulte fotos, modelos e opções de personalização em cada página de produto.'),
  'natal':('Decoração e presentes de Natal em impressão 3D','Explore enfeites, peças decorativas e presentes natalinos produzidos pela AFLarte. Confira fotos, preços e opções de cada modelo.'),
+ 'reveillon-2027':('Réveillon 2027','Conheça os acessórios em impressão 3D da AFLarte para celebrar a chegada de 2027.'),
  'dia-dos-professores':('Presentes para o Dia dos Professores','Conheça lembranças, chaveiros e peças para presentear professores. Consulte as opções disponíveis e combine a personalização com a AFLarte.')
 }
 def visible(p):

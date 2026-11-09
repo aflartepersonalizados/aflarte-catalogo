@@ -1,12 +1,50 @@
-(async()=>{try{const r=await fetch('https://ldzvozipodwkyeuekaqw.supabase.co/functions/v1/catalog-public',{cache:'no-store'});if(!r.ok)return;const data=await r.json();if(!Array.isArray(data.products))return;
+(async()=>{try{
+const publishedCategoryLinks = new Set(Array.from(
+  document.querySelectorAll('.topbar nav a[href^="/categorias/"]'),
+  link => link.getAttribute('href')
+));
+const requestedCategory = location.pathname === '/catalogo/'
+  ? new URLSearchParams(location.search).get('categoria')
+  : null;
+if (requestedCategory) {
+  window.afCategory = requestedCategory;
+  render();
+}
+function categoryHref(category) {
+  if (category === 'todos') return '/catalogo/';
+  const slug = encodeURIComponent(category);
+  const path = `/categorias/${slug}/`;
+  return publishedCategoryLinks.has(path) ? path : `/catalogo/?categoria=${slug}`;
+}
+const r=await fetch('https://ldzvozipodwkyeuekaqw.supabase.co/functions/v1/catalog-public',{cache:'no-store'});if(!r.ok)return;const data=await r.json();if(!Array.isArray(data.products))return;
 const mediaUrl=u=>{u=String(u||'').trim();if(!u)return'';const m=u.match(/drive\.google\.com\/file\/d\/([^/]+)/)||u.match(/[?&]id=([^&]+)/);return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w600`:u};
 const mapped=data.products.filter(p=>p.active!==false&&p.site_visible!==false).map(p=>{const raw=[p.main_image,...(Array.isArray(p.gallery)?p.gallery:[])].filter(Boolean);const norm=s=>String(s||'').trim().replace(/[?#].*$/,'').replace(/\/$/,'');const seen=new Set();const gallery=raw.map(mediaUrl).filter(Boolean).filter(u=>{const k=norm(u);if(seen.has(k))return false;seen.add(k);return true});const img=mediaUrl(p.main_image)||gallery[0]||'assets/logo.webp';const extras=(Array.isArray(p.gallery)?p.gallery:[]).map(mediaUrl).filter(Boolean);return{id:p.id,name:p.name,price:p.price_label,cat:p.category,label:p.category_label,img,gallery:extras,video:(()=>{const u=String(p.video_url||'').trim();const m=u.match(/drive\.google\.com\/file\/d\/([^/]+)/)||u.match(/[?&]id=([^&]+)/);return m?`https://drive.google.com/file/d/${m[1]}/preview`:u})(),short:p.short_description||'',desc:p.description||'',extra:p.extra||'',variants:Array.isArray(p.variants)&&p.variants.length?p.variants:undefined,featured:!!p.featured,shipping_weight_kg:p.shipping_weight_kg,shipping_length_cm:p.shipping_length_cm,shipping_width_cm:p.shipping_width_cm,shipping_height_cm:p.shipping_height_cm}});
 products.splice(0,products.length,...mapped);
 const safe=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 function categories(){const preferred=['sensoriais','brinquedos-e-educativos','personalizados','decoracao-crista','chaveiros','natal'];const labels=new Map();products.forEach(p=>{if(p.cat)labels.set(p.cat,p.label||p.cat)});const ordered=[...preferred.filter(c=>labels.has(c)),...[...labels.keys()].filter(c=>!preferred.includes(c)).sort((a,b)=>(labels.get(a)||a).localeCompare(labels.get(b)||b,'pt-BR'))];return{labels,ordered}}
-function goCategory(cat){location.href=cat==='todos'?'/catalogo/':'/categorias/'+encodeURIComponent(cat)+'/';return;current=cat;document.querySelectorAll('#filters [data-cat]').forEach(x=>x.classList.toggle('active',x.dataset.cat===cat));render();document.getElementById('produtos')?.scrollIntoView({behavior:'smooth',block:'start'})}
-function rebuildCategoryFilters(){const box=document.getElementById('filters');if(!box)return;const {labels,ordered}=categories();const previous=typeof current!=='undefined'?current:'todos';box.innerHTML=`<button data-cat="todos">Todos</button>`+ordered.map(c=>`<button data-cat="${safe(c)}">${safe(labels.get(c)||c)}</button>`).join('');const available=new Set(['todos',...ordered]);if(typeof current!=='undefined'&&!available.has(current))current='todos';box.querySelectorAll('[data-cat]').forEach(btn=>{if(btn.dataset.cat===(available.has(previous)?previous:'todos'))btn.classList.add('active');btn.onclick=()=>goCategory(btn.dataset.cat)})}
-function rebuildHomeCategories(){const box=document.querySelector('.home-category-grid');if(!box)return;const {labels,ordered}=categories();const icons={sensoriais:'🧩','brinquedos-e-educativos':'🧸',personalizados:'🎁','decoracao-crista':'✝️',chaveiros:'🔑',natal:'🎄',pascoa:'🐰'};const desc={sensoriais:'Texturas, movimentos, foco e diversão.','brinquedos-e-educativos':'Brinquedos criativos e peças para aprender brincando.',personalizados:'Nomes, lembranças e peças sob encomenda.','decoracao-crista':'Mensagens de fé para presentear e decorar.',chaveiros:'Peças práticas e personalizadas para levar com você.',natal:'Peças especiais para celebrar o Natal.',pascoa:'Presentes e decoração para a Páscoa.'};box.innerHTML=ordered.map(c=>`<button type="button" class="home-category-card" data-home-dynamic="${safe(c)}"><span class="category-icon">${icons[c]||'✨'}</span><span class="category-copy"><b>${safe(labels.get(c)||c)}</b><small>${safe(desc[c]||'Explore os produtos desta categoria.')}</small></span><span class="category-arrow">→</span></button>`).join('')+`<button type="button" class="home-category-card all-products" data-home-dynamic="todos"><span class="category-icon">✨</span><span class="category-copy"><b>Ver tudo</b><small>Explore o catálogo completo da AFLarte.</small></span><span class="category-arrow">→</span></button>`;box.querySelectorAll('[data-home-dynamic]').forEach(b=>b.onclick=()=>goCategory(b.dataset.homeDynamic))}
+function rebuildCategoryFilters() {
+  const box = document.getElementById('filters');
+  if (!box) return;
+  const {labels, ordered} = categories();
+  if (!window.afCategory && current !== 'todos' && !labels.has(current)) current = 'todos';
+  box.innerHTML = ['todos', ...ordered].map(category => {
+    const label = category === 'todos' ? 'Todos' : labels.get(category);
+    const active = category === current ? ' class="active"' : '';
+    return `<button type="button" data-category-url="${categoryHref(category)}"${active}>${safe(label)}</button>`;
+  }).join('');
+  box.querySelectorAll('[data-category-url]').forEach(button => {
+    button.onclick = () => location.href = button.dataset.categoryUrl;
+  });
+}
+function rebuildHomeCategories() {
+  const box = document.querySelector('.home-category-grid');
+  if (!box) return;
+  const {labels, ordered} = categories();
+  const icons = {sensoriais:'🧩','brinquedos-e-educativos':'🧸',personalizados:'🎁','decoracao-crista':'✝️',chaveiros:'🔑',natal:'🎄',pascoa:'🐰'};
+  const desc = {sensoriais:'Texturas, movimentos, foco e diversão.','brinquedos-e-educativos':'Brinquedos criativos e peças para aprender brincando.',personalizados:'Nomes, lembranças e peças sob encomenda.','decoracao-crista':'Mensagens de fé para presentear e decorar.',chaveiros:'Peças práticas e personalizadas para levar com você.',natal:'Peças especiais para celebrar o Natal.',pascoa:'Presentes e decoração para a Páscoa.'};
+  box.innerHTML = ordered.map(category => `<a class="home-category-card" href="${categoryHref(category)}"><span class="category-icon">${icons[category] || '✨'}</span><span class="category-copy"><b>${safe(labels.get(category))}</b><small>${safe(desc[category] || 'Explore os produtos desta categoria.')}</small></span><span class="category-arrow">→</span></a>`).join('')
+    + '<a class="home-category-card all-products" href="/catalogo/"><span class="category-icon">✨</span><span class="category-copy"><b>Ver tudo</b><small>Explore o catálogo completo da AFLarte.</small></span><span class="category-arrow">→</span></a>';
+}
 function rebuildFeatured(){const box=document.querySelector('.featured-grid');if(!box)return;let list=products.filter(p=>p.featured);if(!list.length)list=products.slice(0,4);box.innerHTML=list.map(p=>`<article class="featured-card"><div class="featured-img" data-feature-view="${safe(p.id)}" role="button" tabindex="0" title="Ver fotos de ${safe(p.name)}"><span class="featured-badge">${safe(p.label||'AFLarte')}</span><img src="${safe(p.img||'assets/logo.webp')}" alt="${safe(p.name)}" loading="lazy" decoding="async"></div><div class="featured-copy"><h3>${safe(p.name)}</h3><p>${safe(p.short||p.desc||'Peça produzida pela AFLarte.')}</p><strong>${safe(p.price)}</strong><div class="featured-actions"><button type="button" class="btn soft" data-feature-view="${safe(p.id)}">Detalhes</button><button type="button" class="btn primary" data-feature-add="${safe(p.id)}">${p.variants?.length?'Escolher opção':'Adicionar'}</button></div></div></article>`).join('');box.querySelectorAll('[data-feature-view]').forEach(b=>{b.onclick=()=>openModal(b.dataset.featureView);b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(b.dataset.featureView)}}});box.querySelectorAll('[data-feature-add]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.featureAdd);if(p?.variants?.length)openModal(p.id);else addToCart(p.id)})}
 function startHeroCarousel(){
  const box=document.querySelector('.hero-art-card');if(!box)return;
