@@ -49,12 +49,13 @@ def generate(data, docs):
     templates = {name: (template_dir / f'{name}.html').read_text() for name in ('home', 'listing', 'product')}
     payment_footer = (template_dir / 'footer-payment.html').read_text().strip()
     payment_styles = '<link rel="stylesheet" href="/assets/payment-icons/footer.css">'
+    holiday_styles = '<link rel="stylesheet" href="/assets/recesso/recesso.css">'
+    holiday_script = '<script src="/assets/recesso/recesso.js" defer></script>'
 
-    def with_payment_footer(body):
+    def with_storefront_elements(body):
         body = re.sub(r'<div class="footer-payment"[^>]*>.*?</div>', lambda _: payment_footer, body, count=1, flags=re.S)
-        if payment_styles not in body:
-            body = body.replace('</head>', payment_styles + '</head>', 1)
-        return body
+        additions = ''.join(tag for tag in (payment_styles, holiday_styles, holiday_script) if tag not in body)
+        return body.replace('</head>', additions + '</head>', 1)
     nav='<nav><a href="/">Início</a><a href="/catalogo/">Produtos</a>'+''.join(f'<a href="/categorias/{c}/">{esc(l)}</a>' for c,l in cats.items())+'</nav>'
     filters='<a class="btn soft" href="/catalogo/">Todos</a>'+''.join(f'<a class="btn soft" href="/categorias/{c}/">{esc(l)}</a>' for c,l in cats.items())
     def cards(items):
@@ -86,7 +87,7 @@ def generate(data, docs):
             else:name=cats.get(path.strip('/').split('/')[-1],'Catálogo de produtos')
             crumbs.append({'@type':'ListItem','position':len(crumbs)+1,'name':name,'item':'https://aflarte.com.br'+path})
             extra+='<script type="application/ld+json">'+js({'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':crumbs})+'</script>'
-        return with_payment_footer(b.replace('</head>', extra + '</head>'))
+        return with_storefront_elements(b.replace('</head>', extra + '</head>'))
     def grid(b,items):
         return re.sub(r'(<div id="grid" class="grid"[^>]*>).*?(</div><p id="empty")',lambda m:m[1]+cards(items)+m[2],b,count=1,flags=re.S)
     files={}
@@ -97,7 +98,7 @@ def generate(data, docs):
     files['catalogo/index.html']=grid(page('listing','Catálogo de produtos | AFLarte','Explore os produtos AFLarte.','/catalogo/'),ps)
     legacy_product = docs / 'produto.html'
     if legacy_product.exists():
-        files['produto.html'] = with_payment_footer(legacy_product.read_text())
+        files['produto.html'] = with_storefront_elements(legacy_product.read_text())
     for c,l in cats.items():
         heading,description=CATEGORY_COPY.get(c,(l+' AFLarte','Conheça '+l+' da AFLarte.'))
         b=page('listing',heading+' | AFLarte',description,'/categorias/'+c+'/')
@@ -124,6 +125,7 @@ def generate(data, docs):
     files['sitemap.xml']='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>https://aflarte.com.br'+esc(u)+'</loc></url>' for u in paths)+'</urlset>'
     # Validate everything before deleting obsolete generated pages.
     shutil.copytree(template_dir / 'payment-icons', docs / 'assets/payment-icons', dirs_exist_ok=True)
+    shutil.copytree(template_dir / 'recesso', docs / 'assets/recesso', dirs_exist_ok=True)
     for path in ['produtos','categorias']:
         shutil.rmtree(docs/path,ignore_errors=True)
     for path,body in files.items():
