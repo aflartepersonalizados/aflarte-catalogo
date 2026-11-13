@@ -27,6 +27,11 @@
 }
 
 .recesso-carrinho strong { display: block; margin-bottom: .2rem; }
+.cart-footer:has(.recesso-carrinho) { flex-wrap: wrap; }
+.cart-footer .recesso-carrinho { width: 100%; margin-top: 0; }
+@media (max-width: 720px) {
+  .cart-footer:has(.recesso-carrinho) { flex-wrap: nowrap; }
+}
 
 .recesso-aviso {
   box-sizing: border-box;
@@ -113,3 +118,64 @@
 
 .recesso-continuar:hover { background: #4c335f; }
 .recesso-aviso button:focus-visible { outline: 2px solid #704c90; outline-offset: 3px; }
+
+.recesso-faixa-natal { background: #e9f2ec; color: #214732; }
+
+.recesso-aviso-natal {
+  width: min(34rem, calc(100% - 1.5rem));
+  max-height: calc(100% - 1.5rem);
+  border-color: #eedbc3;
+  background: #fff9ee;
+  color: #213c2d;
+}
+
+.recesso-aviso-natal .recesso-conteudo { padding: 0; }
+
+.recesso-trem {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1;
+  background: #214732;
+  object-fit: cover;
+}
+
+.recesso-aviso-natal .recesso-texto {
+  padding: clamp(1rem, 4vw, 1.65rem) clamp(1rem, 5vw, 2.5rem) clamp(1.15rem, 4vw, 1.8rem);
+}
+
+.recesso-aviso-natal h2 {
+  max-width: 16ch;
+  margin: 0 auto .75rem;
+  font-size: clamp(1.8rem, 6.5vw, 2.85rem);
+  text-wrap: balance;
+}
+
+.recesso-aviso-natal #recesso-periodo {
+  width: fit-content;
+  padding: .35rem .7rem;
+  border: 1px solid #eac3b4;
+  border-radius: .6rem;
+  background: #fce9e1;
+  color: #832c24;
+  font-size: clamp(1rem, 4vw, 1.15rem);
+}
+
+.recesso-aviso-natal #recesso-periodo time { font-weight: 800; }
+
+.recesso-aviso-natal #recesso-pedidos {
+  margin: .85rem auto 1rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #3c473d;
+  font-size: .93rem;
+  line-height: 1.45;
+}
+
+.recesso-aviso-natal #recesso-pedidos strong { margin-bottom: .35rem; }
+.recesso-aviso-natal .recesso-fechar { background: #fff9ee; color: #213c2d; }
+.recesso-aviso-natal .recesso-fechar:focus-visible { outline-color: #fff9ee; }
+.recesso-aviso-natal .recesso-continuar { background: #24513b; }
+.recesso-aviso-natal .recesso-continuar:hover { background: #173c2a; }
+.recesso-aviso-natal .recesso-continuar:focus-visible { outline-color: #24513b; }
