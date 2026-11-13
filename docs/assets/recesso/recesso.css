@@ -1,0 +1,115 @@
+.recesso-faixa {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: .65rem;
+  row-gap: .15rem;
+  margin: 0;
+  padding: .55rem 1rem;
+  background: #f2edf8;
+  color: #352343;
+  font-size: .875rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.recesso-carrinho {
+  margin: 1rem 0 0;
+  padding: .85rem 1rem;
+  border: 1px solid #e0d3ed;
+  border-inline-start: 4px solid #795a98;
+  border-radius: .75rem;
+  background: #f8f4fc;
+  color: #352343;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+
+.recesso-carrinho strong { display: block; margin-bottom: .2rem; }
+
+.recesso-aviso {
+  box-sizing: border-box;
+  width: min(33rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #e5dceb;
+  border-radius: 1.5rem;
+  background: linear-gradient(155deg, #fffaf7 5%, #fff 50%, #f6f0fb 100%);
+  box-shadow: 0 1.5rem 4.5rem rgba(29, 17, 43, .27);
+  color: #272037;
+  font-family: "DM Sans", sans-serif;
+}
+
+.recesso-aviso::backdrop { background: rgba(19, 17, 30, .62); }
+.recesso-aviso:not([open]) { display: none; }
+
+.recesso-conteudo {
+  position: relative;
+  padding: clamp(1.25rem, 5vw, 2.6rem);
+  text-align: center;
+}
+
+.recesso-logo { display: block; margin: 0 auto .6rem; object-fit: contain; }
+
+.recesso-conteudo h2 {
+  margin: 0 0 .75rem;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.05rem, 7vw, 3.25rem);
+  line-height: 1.05;
+}
+
+#recesso-periodo {
+  margin: 0 auto;
+  color: #603f76;
+  font-size: clamp(.9rem, 3.6vw, 1.05rem);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+#recesso-periodo time { display: inline-block; }
+
+#recesso-pedidos {
+  max-width: 25rem;
+  margin: 1.25rem auto;
+  padding: 1rem;
+  border: 1px solid #e9dff2;
+  border-radius: .9rem;
+  background: #fff;
+  font-size: .975rem;
+  line-height: 1.5;
+}
+
+#recesso-pedidos strong { display: block; margin-bottom: .2rem; }
+
+.recesso-fechar,
+.recesso-continuar {
+  min-height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.recesso-fechar {
+  position: absolute;
+  inset-block-start: .55rem;
+  inset-inline-end: .55rem;
+  width: 2.75rem;
+  background: #f3eaf8;
+  color: #352343;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.recesso-continuar {
+  padding: .75rem 1.35rem;
+  background: #352343;
+  color: #fff;
+  font-weight: 700;
+}
+
+.recesso-continuar:hover { background: #4c335f; }
+.recesso-aviso button:focus-visible { outline: 2px solid #704c90; outline-offset: 3px; }
