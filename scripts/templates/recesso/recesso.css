@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Montagu Slab";
+  src: url("./montagu-slab-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
 .recesso-faixa {
   display: flex;
   flex-wrap: wrap;
@@ -149,6 +157,24 @@
   margin: 0 auto .75rem;
   font-size: clamp(1.8rem, 6.5vw, 2.85rem);
   text-wrap: balance;
+}
+
+.recesso-aviso-natal h2:has(.recesso-chamada) {
+  max-width: none;
+  color: #173c2a;
+  font-family: "Montagu Slab", Georgia, serif;
+  font-size: clamp(1.25rem, 8vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1.08;
+}
+
+.recesso-chamada {
+  display: block;
+  margin-bottom: .25rem;
+  color: #633529;
+  font-size: .7em;
+  letter-spacing: -.02em;
 }
 
 .recesso-aviso-natal #recesso-periodo {
