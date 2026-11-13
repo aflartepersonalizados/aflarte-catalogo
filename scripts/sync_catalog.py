@@ -45,7 +45,16 @@ def generate(data, docs):
     for u in routes.values():
         if not re.fullmatch(r'/produtos/[a-z0-9-]+/',u): raise ValueError('URL inválida')
     cats=dict(sorted({p['category']:p['category_label'] or p['category'] for p in ps}.items()))
-    templates={n:(ROOT/'scripts/templates'/f'{n}.html').read_text() for n in ['home','listing','product']}
+    template_dir = ROOT / 'scripts/templates'
+    templates = {name: (template_dir / f'{name}.html').read_text() for name in ('home', 'listing', 'product')}
+    payment_footer = (template_dir / 'footer-payment.html').read_text().strip()
+    payment_styles = '<link rel="stylesheet" href="/assets/payment-icons/footer.css">'
+
+    def with_payment_footer(body):
+        body = re.sub(r'<div class="footer-payment"[^>]*>.*?</div>', lambda _: payment_footer, body, count=1, flags=re.S)
+        if payment_styles not in body:
+            body = body.replace('</head>', payment_styles + '</head>', 1)
+        return body
     nav='<nav><a href="/">Início</a><a href="/catalogo/">Produtos</a>'+''.join(f'<a href="/categorias/{c}/">{esc(l)}</a>' for c,l in cats.items())+'</nav>'
     filters='<a class="btn soft" href="/catalogo/">Todos</a>'+''.join(f'<a class="btn soft" href="/categorias/{c}/">{esc(l)}</a>' for c,l in cats.items())
     def cards(items):
@@ -77,7 +86,7 @@ def generate(data, docs):
             else:name=cats.get(path.strip('/').split('/')[-1],'Catálogo de produtos')
             crumbs.append({'@type':'ListItem','position':len(crumbs)+1,'name':name,'item':'https://aflarte.com.br'+path})
             extra+='<script type="application/ld+json">'+js({'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':crumbs})+'</script>'
-        return b.replace('</head>',extra+'</head>')
+        return with_payment_footer(b.replace('</head>', extra + '</head>'))
     def grid(b,items):
         return re.sub(r'(<div id="grid" class="grid"[^>]*>).*?(</div><p id="empty")',lambda m:m[1]+cards(items)+m[2],b,count=1,flags=re.S)
     files={}
@@ -86,6 +95,9 @@ def generate(data, docs):
     home=re.sub(r'(<div class="home-category-grid">).*?(</div></section>)',lambda m:m[1]+''.join(f'<a class="home-category-card" href="/categorias/{c}/"><span class="category-icon">✨</span><span class="category-copy"><b>{esc(l)}</b><small>Explore os produtos desta categoria.</small></span><span class="category-arrow">→</span></a>' for c,l in cats.items())+'<a class="home-category-card all-products" href="/catalogo/">Ver tudo</a>'+m[2],home,count=1,flags=re.S)
     files['index.html']=home
     files['catalogo/index.html']=grid(page('listing','Catálogo de produtos | AFLarte','Explore os produtos AFLarte.','/catalogo/'),ps)
+    legacy_product = docs / 'produto.html'
+    if legacy_product.exists():
+        files['produto.html'] = with_payment_footer(legacy_product.read_text())
     for c,l in cats.items():
         heading,description=CATEGORY_COPY.get(c,(l+' AFLarte','Conheça '+l+' da AFLarte.'))
         b=page('listing',heading+' | AFLarte',description,'/categorias/'+c+'/')
@@ -111,6 +123,7 @@ def generate(data, docs):
     paths=['/','/catalogo/','/privacidade.html']+['/categorias/'+c+'/' for c in cats]+list(routes.values())
     files['sitemap.xml']='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>https://aflarte.com.br'+esc(u)+'</loc></url>' for u in paths)+'</urlset>'
     # Validate everything before deleting obsolete generated pages.
+    shutil.copytree(template_dir / 'payment-icons', docs / 'assets/payment-icons', dirs_exist_ok=True)
     for path in ['produtos','categorias']:
         shutil.rmtree(docs/path,ignore_errors=True)
     for path,body in files.items():
