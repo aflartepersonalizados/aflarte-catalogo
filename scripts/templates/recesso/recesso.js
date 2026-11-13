@@ -10,7 +10,7 @@
     {
       until: cutoff,
       sessionKey: 'aflarte:natal:2026-12-05',
-      title: 'Embarque no último envio do ano!',
+      title: '<span class="recesso-chamada">Embarque no</span> último envio do ano!',
       festive: true,
       period: 'Peça até <time datetime="2026-12-05">05/12/2026</time>',
       detail: 'Seu pedido será enviado ainda em 2026.',
